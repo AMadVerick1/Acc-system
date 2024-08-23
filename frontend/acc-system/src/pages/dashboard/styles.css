@@ -1,0 +1,767 @@
+/* Home */
+
+.dashboard {
+  display: flex;
+  flex-direction: row;
+  width: 90%;
+  
+  border-radius: 20px;
+  margin: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.main-content {
+  flex: 1;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px); 
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2); 
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.budget-container, .transactions-container, .section-container {
+  padding: 20px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  margin-bottom: 20px;
+  box-shadow: 3px 3px 10px rgba(255, 255, 255, 0.4), -3px -3px 7px rgba(0, 0, 0, 0.7);
+  color: #ffffff;
+}
+
+.row1 {
+  display: flex;
+  gap: 20px;
+}
+
+.heading-budget{
+  color: #ffffff;
+  /* font-size: 30px; */
+  font-weight: bolder;
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding: 0;
+  border-bottom: 3px solid rgb(255, 255, 255);
+  text-shadow: -3px -3px 17px rgba(255, 255, 255, 0.3), 3px 3px 7px rgba(0, 0, 0, 1);
+}
+
+.info-boxes {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.info-box {
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  border: #0000007e solid 0.6px;
+  box-shadow: 3px 3px 10px rgba(255, 255, 255, 0.4), -3px -3px 7px rgba(0, 0, 0, 0.7);
+  padding: 10px;
+  height: 100px;
+  text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.3);
+}
+
+.chart-container {
+  flex: 2;
+  min-width: 250px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+  box-shadow: 3px 3px 10px rgba(255, 255, 255, 0.4), -3px -3px 7px rgba(0, 0, 0, 0.7);
+}
+
+.analysis-report {
+  flex: 1;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.15);
+  border-radius: 10px;
+}
+
+.transactions-container {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  border-radius: 10px;
+}
+
+.heading-transactions{
+  color: #ffffff;
+  /* font-size: 30px; */
+  font-weight: bolder;
+  margin-top: 0;
+  margin-bottom: 10px;
+  padding: 0;
+  border-bottom: 3px solid rgb(255, 255, 255);
+  text-shadow: -3px -3px 17px rgba(255, 255, 255, 0.3), 3px 3px 7px rgba(0, 0, 0, 1);
+}
+
+
+.tab-button {
+  flex: 1;
+  padding: 10px;
+  border: none;
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.tab-button.active {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+  border-bottom: 4px solid #4caf50;
+}
+
+.tab-button:not(.active):hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.tab-content {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+}
+
+.row3 {
+  display: flex;
+  gap: 20px;
+}
+
+.section-container {
+  flex: 1;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 10px;
+}
+
+.subheading {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  margin-bottom: 10px;
+}
+
+.widget {
+  padding: 15px;
+  border-radius: 10px;
+}
+
+
+.tab-content {
+  background-color: rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.tab-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tab-content th,
+.tab-content td {
+  padding: 15px;
+  text-align: center;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  /* border-radius: 5px; */
+}
+
+.tab-content th {
+  background-color: rgba(255, 255, 255, 0.2);
+  font-weight: bold;
+}
+
+.tab-content td {
+  height: auto;
+}
+
+.tab-content tr:not(:last-child) td {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+
+
+
+
+/* Financial Overview */
+
+.financial-overview {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  margin: 20px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 90%;
+}
+
+.overview-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+
+.charts-section {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.chart-box {
+  flex: 1;
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.recent-transactions {
+  margin-bottom: 30px;
+}
+
+.recent-transactions table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.recent-transactions th, .recent-transactions td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.quick-insights {
+  padding: 20px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+}
+
+.quick-insights p {
+  margin-bottom: 10px;
+}
+
+/* Budget Overview */
+
+.budget-overview {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+}
+
+.add-budget-item-form {
+  margin-bottom: 20px;
+}
+
+.budget-items-table {
+  margin-top: 20px;
+}
+
+.budget-items-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.budget-items-table th, .budget-items-table td {
+  padding: 12px;
+  border: 1px solid #ccc;
+  text-align: left;
+}
+
+.budget-items-table .negative {
+  color: red;
+}
+
+.budget-items-table .positive {
+  color: green;
+}
+
+.budget-breakdown-chart {
+  margin-top: 20px;
+}
+
+.btn-submit {
+  background-color: #4CAF50;
+  color: white;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.btn-submit:hover {
+  background-color: #45a049;
+}
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 2;
+}
+
+.modal-content {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 400px;
+  position: relative;
+}
+
+.close-button {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: none;
+  border: none;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.add-budget-item-form .form-group {
+  margin-bottom: 15px;
+}
+
+
+/* Cash Flow Management *//* Invoices and Quotations will be created on this page*/
+
+.cashflow-dashboard {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  margin: 20px;
+  width: 85%;
+  /* height: 100%; */
+}
+
+.cashflow-header {
+  height: 150px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+
+.csf-heading {
+  font-size: 36px;
+  font-weight: bold;
+  color: #ffffff;
+  text-shadow: -3px -3px 17px rgba(255, 255, 255, 0.3), 3px 3px 7px rgba(0, 0, 0, 1);
+  padding: 0px 20px;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.9);
+}
+
+.content-area {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  /* background-color: rgba(0, 0, 0, 0.7); */
+  border: 2px solid rgba(255, 255, 255, 0.5);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.content-area .row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.content-area .row {
+  width: 100%;
+}
+
+.content-area .btn-add-transaction-container {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.content-area .btn-add-transaction{
+  background-color: rgba(255, 255, 255, 0.3);
+  color: white;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.content-area .btn-add-transaction:hover {
+  background-color: rgba(255, 255, 255, 0.8);
+  color: black;
+}
+
+.tabs {
+  display: flex;
+  padding: 10px 11px ;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 10px;
+  width: 300px;
+  gap: 1px;
+  margin-bottom: 10px;
+}
+
+.tab-button {
+  padding: 10px;
+  background: transparent;
+  color: black;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border-radius: 5px;
+}
+
+.tab-button:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.tab-button.active {
+  background-color: black;
+  color: white;
+  border: 1px solid black;
+  border-radius: 5px;
+}
+
+.tab-content {
+  background-color: rgba(0, 0, 0, 0.9);
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.tab-content table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tab-content th,
+.tab-content td {
+  padding: 15px;
+  text-align: center;
+  color: white;
+  background-color: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.tab-content th {
+  background-color: rgba(255, 255, 255, 0.2);
+  font-weight: bold;
+}
+
+.tab-content td {
+  color: rgb(226, 226, 226);
+}
+
+.tab-content tr:not(:last-child) td {
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+
+/* Reports */
+.reports-dashboard {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  margin: 20px;
+  width: 85%;
+  height: auto;
+}
+
+.reports-dashboard .col-1 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  width: 20%;
+}
+
+.reports-dashboard .col-1 ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.reports-dashboard .col-1 ul li {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.reports-dashboard .col-1 ul .list-item.active{
+  background-color: rgba(255, 255, 255, 0.5);
+} 
+
+.reports-dashboard .col-1 ul li:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.reports-dashboard .col-2 {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.report-section {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  height: 100%;
+}
+
+.report-content {
+  margin-top: 20px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  /* height: 100%; */
+}
+
+.chart-container {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  flex-grow: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.report-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.export-button {
+  padding: 10px 20px;
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.export-button:hover {
+  background-color: #45a049;
+}
+
+.heading {
+  font-size: 30px;
+  font-weight: bold;
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.report-detail table{
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.report-detail th,
+.report-detail td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.report-detail th {
+  background-color: rgba(0, 0, 0, 0.1);
+  font-weight: bold;
+}
+
+
+
+/* Payroll and Taxes */
+.payroll-dashboard {
+  display: flex;
+  gap: 20px;
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  margin: 20px;
+  width: 85%;
+  height: auto;
+}
+
+.payroll-dashboard .col-1 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 20px;
+  background: linear-gradient(45deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.2));
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  width: 20%;
+}
+
+.payroll-dashboard .col-1 ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.payroll-dashboard .col-1 ul li {
+  margin-bottom: 10px;
+  padding: 10px;
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 18px;
+}
+
+.payroll-dashboard .col-1 ul li:hover {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+
+.payroll-dashboard .col-1 ul li.active {
+  background-color: rgba(255, 255, 255, 0.5);
+}
+
+.payroll-dashboard .col-2 {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  padding: 20px;
+}
+
+.payroll-section {
+  padding: 20px;
+  background-color: rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+}
+
+.payroll-content {
+  margin-top: 20px;
+  background-color: rgba(0, 0, 0, 0.05);
+  border-radius: 10px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.employee-table {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.employee-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.employee-table th,
+.employee-table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.payroll-actions {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+}
+
+.process-button,
+.export-button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.process-button:hover,
+.export-button:hover {
+  background-color: #0056b3;
+}
+
+.heading {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.salary-table, .deductions-table, .tax-table, .payslip-table {
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  padding: 20px;
+  overflow-x: auto;
+}
+
+.salary-table table, .deductions-table table, .tax-table table, .payslip-table table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.salary-table th, .deductions-table th, .tax-table th, .payslip-table th,
+.salary-table td, .deductions-table td, .tax-table td, .payslip-table td {
+  padding: 10px;
+  text-align: left;
+  border: 1px solid rgba(0, 0, 0, 0.5);
+}
+
+.edit-button, .generate-button {
+  padding: 8px 12px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.edit-button:hover, .generate-button:hover {
+  background-color: #0056b3;
+}
+
+/* Sidebar active state */
+.list-item.active {
+  background-color: rgba(255, 255, 255, 0.3);
+}
+

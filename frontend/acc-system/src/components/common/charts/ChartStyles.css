@@ -1,0 +1,25 @@
+h3{
+    color: #333;
+    font-size: 25px;
+    margin-bottom: 20px;
+}
+
+.charts-section {
+    margin-top: 20px;
+}
+
+
+.charts-section h3 {
+    margin-bottom: 10px;
+    color: #333;
+    font-size: 18px;
+}
+
+.budget-chart, .income-expense-chart, .cashflow-graph {
+    margin-bottom: 40px;
+    padding: 20px;
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+}
+

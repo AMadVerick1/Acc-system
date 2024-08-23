@@ -1,0 +1,50 @@
+.cards-container {
+  display: flex;
+  gap: 20px;
+  margin: 20px 0;
+}
+
+.card {
+  flex: 1;
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(10px);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+.card-icon {
+  font-size: 40px;
+  margin-right: 20px;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.card-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #ffffff;
+  margin: 0 0 10px 0;
+}
+
+.card-value {
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffffff;
+}
+
+.card i {
+  color: rgba(255, 255, 255, 0.8);
+}
