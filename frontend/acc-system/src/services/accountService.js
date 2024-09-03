@@ -1,21 +1,42 @@
-import api from './api';
+import axios from 'axios';
+import api from './api'; // Assuming api is the base URL
 
 export const getAllAccounts = async () => {
-  const response = await api.get('/accounts');
-  return response.data;
+  try {
+    const response = await axios.get(`${api}/accounts`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching accounts:', error);
+    throw error; // Handle the error accordingly
+  }
 };
 
 export const createAccount = async (accountData) => {
-  const response = await api.post('/accounts', accountData);
-  return response.data;
+  try {
+    const response = await axios.post(`${api}/accounts`, accountData);
+    return response.data;
+  } catch (error) {
+    console.error('Error creating account:', error);
+    throw error; // Handle the error accordingly
+  }
 };
 
 export const updateAccount = async (id, updateData) => {
-  const response = await api.put(`/accounts/${id}`, updateData);
-  return response.data;
+  try {
+    const response = await axios.put(`${api}/accounts/${id}`, updateData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating account:', error);
+    throw error; // Handle the error accordingly
+  }
 };
 
 export const deleteAccount = async (id) => {
-  const response = await api.delete(`/accounts/${id}`);
-  return response.data;
+  try {
+    const response = await axios.delete(`${api}/accounts/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting account:', error);
+    throw error; // Handle the error accordingly
+  }
 };

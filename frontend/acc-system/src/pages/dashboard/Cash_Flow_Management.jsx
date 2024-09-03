@@ -2,7 +2,85 @@ import React, { useState, useEffect } from 'react';
 import AllTransactions from '../../components/common/transactions_list/AllTransactions.jsx';
 import IncomeTransactions from '../../components/common/transactions_list/IncomeTransactions.jsx';
 import ExpenseTransactions from '../../components/common/transactions_list/ExpenseTransactions.jsx';
-import TransactionFormModal from '../../components/common/forms/TransactionsModal.jsx';
+import TransactionFormModal from '../../components/common/modals/TransactionsModal.jsx';
+
+// function calculateBalance(transactions) {
+//     let balance = 0;
+
+//     transactions.forEach((transaction) => {
+//         if (transaction.type === 'income') {
+//             balance += transaction.amount;
+//         } else if (transaction.type === 'expense') {
+//             balance -= transaction.amount;
+//         }
+//     });
+
+//     return balance;
+// } 
+
+// function calculateIncome(transactions) {
+//     let income = 0;
+
+//     transactions.forEach((transaction) => {
+//         if (transaction.type === 'income') {
+//             income += transaction.amount;
+//         }
+//     });
+
+//     return income;
+// }
+
+// function calculateExpense(transactions) {
+//     let expense = 0;
+    
+//     transactions.forEach((transaction) => {
+//         if (transaction.type === 'expense') {
+//             expense += transaction.amount;
+//         }
+//     });
+
+//     return expense;
+// }
+
+// function calculateTotal(transactions) {
+//     let total = 0;
+    
+//     transactions.forEach((transaction) => {
+//         total += transaction.amount;
+//     });
+
+//     return total;
+// }
+
+// function calculateNetProfit(transactions) {
+//     let netProfit = 0;
+    
+//     transactions.forEach((transaction) => {
+//         if (transaction.type === 'income') {
+//             netProfit += transaction.amount;
+//         } else if (transaction.type === 'expense') {
+//             netProfit -= transaction.amount;
+//         }
+//     });
+
+//     return netProfit;
+// }
+
+// function calculateNetLoss(transactions) {
+//     let netLoss = 0;
+    
+//     transactions.forEach((transaction) => {
+//         if (transaction.type === 'income') {
+//             netLoss -= transaction.amount;
+//         } else if (transaction.type === 'expense') {
+//             netLoss += transaction.amount;
+//         }
+//     });
+
+//     return netLoss;
+// }
+
+
 
 export default function CashFlow() {
     const [transactions, setTransactions] = useState([]);

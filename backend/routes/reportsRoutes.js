@@ -1,9 +1,9 @@
 const express = require('express');
-const { generateReport, getDashboardMetrics } = require('../controllers/reportController');
-const { protect } = require('../middleware/authMiddleware');
+const { generateReport, getReports } = require('../controllers/reportController');
+// const { protect } = require('../middleware/authMiddleware');
 const router = express.Router();
 
-router.get('/generate', protect, generateReport);
-router.get('/metrics', protect, getDashboardMetrics);
+router.get('/generate', generateReport);
+router.get('/metrics', getReports);
 
 module.exports = router;

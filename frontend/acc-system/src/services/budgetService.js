@@ -1,21 +1,47 @@
-import api from './api';
+import axios from 'axios';
 
+const baseURL = 'http://localhost:5000/budgets';
+
+// Get Budget Overview
 export const getBudgetOverview = async () => {
-  const response = await api.get('/budget');
-  return response.data;
+  try {
+    const response = await axios.get(`${baseURL}/get-budget-items`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching budget overview:', error);
+    throw error;
+  }
 };
 
+// Add a new Budget Item
 export const addBudgetItem = async (budgetData) => {
-  const response = await api.post('/budget', budgetData);
-  return response.data;
+  try {
+    const response = await axios.post(`${baseURL}/add-budget-item`, budgetData);
+    return response.data;
+  } catch (error) {
+    console.error('Error adding budget item:', error);
+    throw error;
+  }
 };
 
+// Update an existing Budget Item
 export const updateBudgetItem = async (id, updateData) => {
-  const response = await api.put(`/budget/${id}`, updateData);
-  return response.data;
+  try {
+    const response = await axios.put(`${baseURL}/update-budget-item/${id}`, updateData);
+    return response.data;
+  } catch (error) {
+    console.error('Error updating budget item:', error);
+    throw error;
+  }
 };
 
+// Delete a Budget Item
 export const deleteBudgetItem = async (id) => {
-  const response = await api.delete(`/budget/${id}`);
-  return response.data;
+  try {
+    const response = await axios.delete(`${baseURL}/delete-budget-item/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error deleting budget item:', error);
+    throw error;
+  }
 };

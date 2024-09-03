@@ -10,11 +10,26 @@ const createTransaction = async (transactionData) => {
 };
 
 const updateTransaction = async (id, updatedData) => {
-  return await Transaction.findByIdAndUpdate(id, updatedData, { new: true });
+  const transaction = await Transaction.findByIdAndUpdate(id, updatedData, {
+    new: true,
+    runValidators: true, // Ensures data consistency
+  });
+
+  if (!transaction) {
+    throw new Error('Transaction not found');
+  }
+
+  return transaction;
 };
 
 const deleteTransaction = async (id) => {
-  return await Transaction.findByIdAndDelete(id);
+  const transaction = await Transaction.findByIdAndDelete(id);
+
+  if (!transaction) {
+    throw new Error('Transaction not found');
+  }
+
+  return transaction;
 };
 
 module.exports = {

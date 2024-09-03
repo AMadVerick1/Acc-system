@@ -1,64 +1,42 @@
-const express = require("express");
-const dotenv = require("dotenv");
-const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
-const cors = require("cors");
-const { errorHandler } = require("./middleware/errorHandler");
-const rateLimiter = require('./rateLimiter');
+// index.js
+require('dotenv').config();
+const express = require('express');
+const connectDB = require('./config/db'); 
+const cors = require('cors');
+// const limiter = require('./middleware/rateLimiter');
+// const { errorHandler } = require('./middleware/errorHandler');
 
-// Load environment variables
-dotenv.config();
-
-// Import Routes
-const authRoutes = require("./routes/authRoutes");
-const userRoutes = require("./routes/userRoutes");
-const accountRoutes = require("./routes/accountsRoutes");
-const transactionRoutes = require("./routes/transactionsRoutes");
-const payrollRoutes = require("./routes/payrollRoutes");
-const reportRoutes = require("./routes/reportsRoutes");
-
-
+// Initialize Express
 const app = express();
-const PORT = process.env.PORT;
 
-// Middleware
-app.use(cors({
-    origin: 'http://localhost:3000',
-    credentials: true,
-}));
+// middleware
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-app.use(rateLimiter);
+app.use(cors());
 
-// Define Routes
-app.use("/api/auth", authRoutes);
-app.use("/api/users", userRoutes);
-app.use("/api/accounts", accountRoutes);
-app.use("/api/transactions", transactionRoutes);
-app.use("/api/payroll", payrollRoutes);
-app.use("/api/reports", reportRoutes);
+// app.use((req, res, next) => {
+// res.header('Access-Control-Allow-Origin', 'http://localhost:3000');
+// res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+// next();
+// });
 
-// Home Route
-app.get("/", (req, res) => {
-    res.send("Home page of the Accounting Management System");
-});
+
+
+// Routes
+// app.use('/api/auth', require('./routes/authRoutes'));
+// app.use('/users', require('./routes/userRoutes'));
+// app.use('/accounts', require('./routes/accountsRoutes'));
+app.use('/budgets', require('./routes/budgetRoutes'));
+// app.use('/transactions', require('./routes/transactionsRoutes'));
+// app.use('/payroll', require('./routes/payrollRoutes'));
+// app.use('/reports', require('./routes/reportsRoutes'));
 
 // Error Handling Middleware
-app.use(errorHandler);
+// app.use(errorHandler);
 
-// Database Connection and Server Startup
-mongoose
-    .connect(process.env.MONGO_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    })
-    .then(() => {
-        app.listen(PORT, () => {
-            console.log(`Server running on port ${PORT}`);
-        });
-    })
-    .catch((error) => {
-        console.error("Database connection failed:", error.message);
-        process.exit(1);
-    });
+// Connect to Database
+connectDB();
+// Start the server
+const PORT = process.env.PORT;
+app.listen(PORT, () => 
+    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+);

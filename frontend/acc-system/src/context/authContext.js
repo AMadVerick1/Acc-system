@@ -1,68 +1,68 @@
-// // src/context/AuthContext.js
-// import React, { createContext, useContext, useState, useEffect } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import React, { createContext, useState, useContext } from 'react';
+import { getAllUsers, registerUser, loginUser, getUserProfile, updateUserProfile } from '../services/authService';
 
-// const AuthContext = createContext();
+const AuthContext = createContext();
 
-// export const AuthProvider = ({ children }) => {
-//     const [isAuthenticated, setIsAuthenticated] = useState(false);
-//     const [loading, setLoading] = useState(true);
-//     const navigate = useNavigate();
+export const AuthContextProvider = ({ children }) => {
+  const [user, setUser] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-//     // Simulate checking the authentication status (e.g., from a token or API)
-//     useEffect(() => {
-//         const checkAuthStatus = async () => {
-//             setLoading(true);
-//             const token = localStorage.getItem('token');
-//             if (token) {
-//                 try {
-//                     // Validate token (you might do an API call here)
-//                     const isValid = await validateToken(token); // Placeholder function
+  const fetchAllUsers = async () => {
+    setLoading(true);
+    try {
+      const users = await getAllUsers();
+      setUser(users); // Assuming user state holds the logged-in user
+    } catch (error) {
+      console.error('Failed to fetch users:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//                     if (isValid) {
-//                         setIsAuthenticated(true);
-//                     } else {
-//                         localStorage.removeItem('token'); // Remove invalid token
-//                     }
-//                 } catch (error) {
-//                     console.error('Token validation error:', error);
-//                     localStorage.removeItem('token'); // Handle errors
-//                 }
-//             }
-//             setLoading(false);
-//         };
+  const register = async (userData) => {
+    try {
+      const newUser = await registerUser(userData);
+      setUser(newUser);
+    } catch (error) {
+      console.error('Failed to register user:', error);
+    }
+  };
 
-//         checkAuthStatus();
-//     }, []);
+  const login = async (credentials) => {
+    try {
+      const loggedInUser = await loginUser(credentials);
+      setUser(loggedInUser);
+    } catch (error) {
+      console.error('Failed to login:', error);
+    }
+  };
 
-//     const validateToken = async (token) => {
-//         // Simulate token validation. In a real app, send a request to your backend.
-//         // Example API call:
-//         // const response = await fetch('/api/validate-token', { headers: { Authorization: `Bearer ${token}` } });
-//         // return response.ok;
+  const fetchUserProfile = async () => {
+    setLoading(true);
+    try {
+      const profile = await getUserProfile();
+      setUser(profile);
+    } catch (error) {
+      console.error('Failed to fetch profile:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-//         return token === ''; // For demo purposes, replace with your logic.
-//     };
+  const updateProfile = async (updateData) => {
+    try {
+      const updatedProfile = await updateUserProfile(updateData);
+      setUser(updatedProfile);
+    } catch (error) {
+      console.error('Failed to update profile:', error);
+    }
+  };
 
-//     const login = async (userCredentials) => {
-//         // Replace with actual login logic
-//         const token = ''; // Simulate a token returned from backend
-//         localStorage.setItem('token', token);
-//         setIsAuthenticated(true);
-//         navigate('/'); // Redirect to the dashboard after login
-//     };
+  return (
+    <AuthContext.Provider value={{ user, fetchAllUsers, register, login, fetchUserProfile, updateProfile, loading }}>
+      {children}
+    </AuthContext.Provider>
+  );
+};
 
-//     const logout = () => {
-//         localStorage.removeItem('token');
-//         setIsAuthenticated(false);
-//         navigate('/login'); // Redirect to login page after logout
-//     };
-
-//     return (
-//         <AuthContext.Provider value={{ isAuthenticated, login, logout }}>
-//             {!loading && children}
-//         </AuthContext.Provider>
-//     );
-// };
-
-// export const useAuth = () => useContext(AuthContext);
+export const useAuth = () => useContext(AuthContext);

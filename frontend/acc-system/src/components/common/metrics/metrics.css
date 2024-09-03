@@ -16,7 +16,9 @@
 }
 
 .metric-card {
-    background-color: #f0f0f0;
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.4),rgba(255, 255, 255, 0)) ;
+    box-shadow:  1px 4px 15px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(30px);
     padding: 20px;
     border-radius: 8px;
     text-align: center;

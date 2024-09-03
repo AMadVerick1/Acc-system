@@ -1,21 +1,22 @@
 import api from './api';
+import axios from 'axios';
 
 export const getAllPayrolls = async () => {
-  const response = await api.get('/payroll');
+  const response = await axios.get(`${api}, /payroll`);
   return response.data;
 };
 
 export const createPayroll = async (payrollData) => {
-  const response = await api.post('/payroll', payrollData);
+  const response = await axios.post(`${api}, /payroll`, payrollData);
   return response.data;
 };
 
 export const updatePayroll = async (id, updateData) => {
-  const response = await api.put(`/payroll/${id}`, updateData);
+  const response = await axios.put(`${api}, /payroll/${id}`, updateData);
   return response.data;
 };
 
 export const deletePayroll = async (id) => {
-  const response = await api.delete(`/payroll/${id}`);
+  const response = await axios.delete(`${api}, /payroll/${id}`);
   return response.data;
 };

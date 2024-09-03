@@ -1,5 +1,5 @@
 h3{
-    color: #333;
+    color: #ffffff;
     font-size: 25px;
     margin-bottom: 20px;
 }
@@ -18,8 +18,7 @@ h3{
 .budget-chart, .income-expense-chart, .cashflow-graph {
     margin-bottom: 40px;
     padding: 20px;
-    background-color: #ffffff;
-    border: 1px solid #e0e0e0;
+    border: 1px solid #000000;
     border-radius: 8px;
 }
 

@@ -1,59 +1,62 @@
-import React, { createContext, useReducer } from 'react';
-import { v4 as uuidv4 } from 'uuid';
+import React, { createContext, useState, useContext } from 'react';
+import { getBudgetOverview, addBudgetItem, updateBudgetItem, deleteBudgetItem } from '../services/budgetService';
 
-// 5. The reduceer - this is used to update the state, based on the action
-export const AppReducer = (state, action) => {
-	switch (action.type) {
-		case 'ADD_EXPENSE':
-			return {
-				...state,
-				expenses: [...state.expenses, action.payload],
-			};
-		case 'DELETE_EXPENSE':
-			return {
-				...state,
-				expenses: state.expenses.filter(
-					(expense) => expense.id !== action.payload
-				),
-			};
-		case 'SET_BUDGET':
-			return {
-				...state,
-				budget: action.payload,
-			};
+const BudgetContext = createContext();
 
-		default:
-			return state;
-	}
+export const BudgetContextProvider = ({ children }) => {
+  const [budgetItems, setBudgetItems] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null); // Error state
+
+  const fetchBudgetOverview = async () => {
+    setLoading(true);
+    setError(null); // Reset error before fetching
+    try {
+      const data = await getBudgetOverview();
+      console.log('Fetched data:', data); // Debugging log
+      setBudgetItems(data);
+    } catch (error) {
+      console.error('Failed to fetch budget overview:', error);
+      setError('Failed to fetch data'); // Set error message
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const addBudget = async (budgetData) => {
+    try {
+      const newItem = await addBudgetItem(budgetData);
+      setBudgetItems((prev) => [...prev, newItem]);
+    } catch (error) {
+      console.error('Failed to add budget item:', error);
+    }
+  };
+
+  const editBudgetItem = async (id, updateData) => {
+    try {
+      const updatedItem = await updateBudgetItem(id, updateData);
+      setBudgetItems((prev) =>
+        prev.map((item) => (item._id === id ? updatedItem : item)) // Use _id consistently
+      );
+    } catch (error) {
+      console.error('Failed to update budget item:', error);
+    }
+  };
+
+  const removeBudgetItem = async (id) => {
+    try {
+      await deleteBudgetItem(id);
+      setBudgetItems((prev) => prev.filter((item) => item._id !== id)); // Use _id consistently
+    } catch (error) {
+      console.error('Failed to delete budget item:', error);
+    }
+  };
+
+  return (
+    <BudgetContext.Provider value={{ budgetItems, fetchBudgetOverview, addBudget, editBudgetItem, removeBudgetItem, loading, error }}>
+      {children}
+    </BudgetContext.Provider>
+  );
 };
 
-// 1. Sets the initial state when the app loads
-const initialState = {
-	budget: 2000,
-	expenses: [
-
-	],
-};
-
-// 2. Creates the context this is the thing our components import and use to get the state
-export const BudgetContext = createContext();
-
-// 3. Provider component - wraps the components we want to give access to the state
-// Accepts the children, which are the nested(wrapped) components
-export const AppProvider = (props) => {
-	// 4. Sets up the app state. takes a reducer, and an initial state
-	const [state, dispatch] = useReducer(AppReducer, initialState);
-
-	// 5. Returns our context. Pass in the values we want to expose
-	return (
-		<BudgetContext.Provider
-			value={{
-				expenses: state.expenses,
-				budget: state.budget,
-				dispatch,
-			}}
-		>
-			{props.children}
-		</BudgetContext.Provider>
-	);
-};
+export const useBudget = () => useContext(BudgetContext);

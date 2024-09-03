@@ -5,13 +5,17 @@ const getAllPayrolls = async (userId) => {
 };
 
 const createPayroll = async (payrollData, userId) => {
-  const { employeeName, salary, payDate } = payrollData;
+  const { employeeName, salary, tax, deduction, netPay, paymentDate, createdAt } = payrollData;
 
   const newPayroll = new Payroll({
     user: userId,
     employeeName,
     salary,
-    payDate,
+    tax,
+    deduction,
+    netPay,
+    paymentDate,
+    createdAt,
   });
 
   return await newPayroll.save();
@@ -20,6 +24,7 @@ const createPayroll = async (payrollData, userId) => {
 const updatePayroll = async (payrollId, updateData) => {
   const payroll = await Payroll.findByIdAndUpdate(payrollId, updateData, {
     new: true,
+    runValidators: true,
   });
 
   if (!payroll) {

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import './styles.css';
 import ApexCharts from 'apexcharts';
-import './styles.css'; // Import the CSS file
+import React, { useState, useEffect } from 'react';
 import Cards from '../../components/common/card/card.jsx'; 
 import AllTransactions from '../../components/common/transactions_list/AllTransactions.jsx';
 import IncomeTransactions from '../../components/common/transactions_list/IncomeTransactions.jsx';

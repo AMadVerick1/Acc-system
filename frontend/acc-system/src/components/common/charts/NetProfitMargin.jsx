@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import Chart from 'react-apexcharts';
-import { useTransactions } from '../context/transactionContext';
+import { useTransactions } from '../../../context/transactionContext';
 
-const CashFlowChart = () => {
+const NetProfitMarginChart = () => {
   const { transactions } = useTransactions();
   const [chartData, setChartData] = useState({
-    series: [
-      { name: 'Operating Cash Flow', data: [] },
-      { name: 'Free Cash Flow', data: [] },
-    ],
+    series: [{ name: 'Net Profit Margin', data: [] }],
     options: {
       chart: {
         type: 'line',
@@ -16,11 +13,16 @@ const CashFlowChart = () => {
       xaxis: {
         categories: [], // Months or dates
       },
+      yaxis: {
+        labels: {
+          formatter: (value) => `${value.toFixed(2)}%`,
+        },
+      },
       dataLabels: {
         enabled: false,
       },
       title: {
-        text: 'Cash Flow Analysis',
+        text: 'Net Profit Margin Over Time',
         align: 'left',
       },
     },
@@ -28,25 +30,20 @@ const CashFlowChart = () => {
 
   useEffect(() => {
     const categories = ['January', 'February', 'March']; // Replace with dynamic dates or months
-    const operatingCashFlow = categories.map((month) => {
-      const income = transactions
+    const netProfitMargin = categories.map((month) => {
+      const revenue = transactions
         .filter((t) => t.type === 'income' && t.date.includes(month))
         .reduce((acc, curr) => acc + curr.amount, 0);
       const expenses = transactions
         .filter((t) => t.type === 'expense' && t.date.includes(month))
         .reduce((acc, curr) => acc + curr.amount, 0);
-      return income - expenses;
+      const netProfit = revenue - expenses;
+      return revenue > 0 ? (netProfit / revenue) * 100 : 0;
     });
-
-    // Assume free cash flow is the operating cash flow minus some capital expenditures
-    const freeCashFlow = operatingCashFlow.map((ocf) => ocf - 500); // Placeholder for capital expenditures
 
     setChartData({
       ...chartData,
-      series: [
-        { name: 'Operating Cash Flow', data: operatingCashFlow },
-        { name: 'Free Cash Flow', data: freeCashFlow },
-      ],
+      series: [{ name: 'Net Profit Margin', data: netProfitMargin }],
       options: {
         ...chartData.options,
         xaxis: { categories },
@@ -57,4 +54,4 @@ const CashFlowChart = () => {
   return <Chart options={chartData.options} series={chartData.series} type="line" />;
 };
 
-export default CashFlowChart;
+export default NetProfitMarginChart;

@@ -9,7 +9,7 @@ export default function KeyMetrics() {
 
     return (
         <div className="key-metrics">
-            <h3>Key Metrics</h3>
+            <h2>Key Metrics</h2>
             <div className="metric-cards">
                 <div className="metric-card">
                     <h3>Total Income</h3>

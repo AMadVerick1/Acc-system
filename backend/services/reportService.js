@@ -1,8 +1,8 @@
 const Report = require('../models/reportsModels');
 
-const generate = async (userId, queryOptions) => {
+const generateReport = async (userId, queryOptions) => {
   // Implement logic to generate a report based on query options (e.g., date range)
-  const reportData = {}; // Add logic to generate report data
+  const reportData = {}; // Placeholder logic to generate report data
 
   const newReport = new Report({
     user: userId,
@@ -17,6 +17,6 @@ const getReports = async (userId) => {
 };
 
 module.exports = {
-  generate,
+  generateReport,
   getReports,
 };

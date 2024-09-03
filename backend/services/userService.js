@@ -11,6 +11,7 @@ const getUserProfile = async (userId) => {
 const updateUserProfile = async (userId, updateData) => {
   const updatedUser = await User.findByIdAndUpdate(userId, updateData, {
     new: true,
+    runValidators: true, // Ensures that model validators are applied during update
   }).select('-password');
 
   if (!updatedUser) {

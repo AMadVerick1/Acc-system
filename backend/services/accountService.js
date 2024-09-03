@@ -6,7 +6,7 @@ const getAllAccounts = async (userId) => {
 
 const createAccount = async (accountData, userId) => {
   const { name, balance, accountType } = accountData;
-  
+
   const newAccount = new Account({
     user: userId,
     name,
@@ -20,6 +20,7 @@ const createAccount = async (accountData, userId) => {
 const updateAccount = async (accountId, updateData) => {
   const account = await Account.findByIdAndUpdate(accountId, updateData, {
     new: true,
+    runValidators: true,
   });
 
   if (!account) {
