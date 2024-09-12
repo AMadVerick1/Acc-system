@@ -3,116 +3,20 @@ import AllTransactions from '../../components/common/transactions_list/AllTransa
 import IncomeTransactions from '../../components/common/transactions_list/IncomeTransactions.jsx';
 import ExpenseTransactions from '../../components/common/transactions_list/ExpenseTransactions.jsx';
 import TransactionFormModal from '../../components/common/modals/TransactionsModal.jsx';
-
-// function calculateBalance(transactions) {
-//     let balance = 0;
-
-//     transactions.forEach((transaction) => {
-//         if (transaction.type === 'income') {
-//             balance += transaction.amount;
-//         } else if (transaction.type === 'expense') {
-//             balance -= transaction.amount;
-//         }
-//     });
-
-//     return balance;
-// } 
-
-// function calculateIncome(transactions) {
-//     let income = 0;
-
-//     transactions.forEach((transaction) => {
-//         if (transaction.type === 'income') {
-//             income += transaction.amount;
-//         }
-//     });
-
-//     return income;
-// }
-
-// function calculateExpense(transactions) {
-//     let expense = 0;
-    
-//     transactions.forEach((transaction) => {
-//         if (transaction.type === 'expense') {
-//             expense += transaction.amount;
-//         }
-//     });
-
-//     return expense;
-// }
-
-// function calculateTotal(transactions) {
-//     let total = 0;
-    
-//     transactions.forEach((transaction) => {
-//         total += transaction.amount;
-//     });
-
-//     return total;
-// }
-
-// function calculateNetProfit(transactions) {
-//     let netProfit = 0;
-    
-//     transactions.forEach((transaction) => {
-//         if (transaction.type === 'income') {
-//             netProfit += transaction.amount;
-//         } else if (transaction.type === 'expense') {
-//             netProfit -= transaction.amount;
-//         }
-//     });
-
-//     return netProfit;
-// }
-
-// function calculateNetLoss(transactions) {
-//     let netLoss = 0;
-    
-//     transactions.forEach((transaction) => {
-//         if (transaction.type === 'income') {
-//             netLoss -= transaction.amount;
-//         } else if (transaction.type === 'expense') {
-//             netLoss += transaction.amount;
-//         }
-//     });
-
-//     return netLoss;
-// }
-
-
+import { useTransactions } from '../../context/transactionContext';
+import { useAccounts } from '../../context/accountContext';
 
 export default function CashFlow() {
-    const [transactions, setTransactions] = useState([]);
+    const { transactions, fetchAllTransactions, addTransaction, editTransaction, removeTransaction, error, loading } = useTransactions();
+    const { accounts, fetchAccounts } = useAccounts();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState(null);
     const [transactionsView, setTransactionsView] = useState('all');
 
     useEffect(() => {
-        // Load transactions from localStorage on component mount
-        const storedTransactions = JSON.parse(localStorage.getItem('transactions')) || [];
-        setTransactions(storedTransactions);
+        fetchAllTransactions();
+        fetchAccounts();
     }, []);
-
-    useEffect(() => {
-        // Save transactions to localStorage whenever transactions state changes
-        localStorage.setItem('transactions', JSON.stringify(transactions));
-    }, [transactions]);
-
-    const addTransaction = (newTransaction) => {
-        if (editingTransaction) {
-            // Update existing transaction
-            setTransactions(transactions.map(t =>
-                t.date === editingTransaction.date && t.description === editingTransaction.description
-                    ? { ...newTransaction }
-                    : t
-            ));
-        } else {
-            // Add new transaction
-            setTransactions([...transactions, newTransaction]);
-        }
-        setEditingTransaction(null); // Clear editing transaction after saving
-    };
 
     const handleTabClick = (tab) => {
         setTransactionsView(tab);
@@ -123,25 +27,75 @@ export default function CashFlow() {
         setModalIsOpen(true);
     };
 
+    const handleDelete = (id) => {
+        removeTransaction(id);
+    };
+
+    const handleSubmit = (transactionData) => {
+        if (editingTransaction) {
+            editTransaction(transactionData);
+        } else {
+            addTransaction(transactionData);
+        }
+        setModalIsOpen(false);
+        setEditingTransaction(null);
+    };
+
     const renderContent = () => {
+        if (loading) {
+            return <p>Loading transactions...</p>;
+        }
+
+        if (error) {
+            return <p>Error: {error}</p>;
+        }
+
         switch (transactionsView) {
             case 'all':
                 return <AllTransactions transactions={transactions} onEdit={handleEditClick} />;
             case 'income':
-                return <IncomeTransactions transactions={transactions.filter((t) => t.type === 'income')} onEdit={handleEditClick} />;
+                return <IncomeTransactions transactions={transactions.filter((t) => t.type === 'Income')} onEdit={handleEditClick} />;
             case 'expense':
-                return <ExpenseTransactions transactions={transactions.filter((t) => t.type === 'expense')} onEdit={handleEditClick} />;
+                return <ExpenseTransactions transactions={transactions.filter((t) => t.type === 'Expense')} onEdit={handleEditClick} />;
             default:
                 return <AllTransactions transactions={transactions} onEdit={handleEditClick} />;
         }
     };
 
+    const [totalIncome, setTotalIncome] = useState(0);
+    const [totalExpenses, setTotalExpenses] = useState(0);
+    const [netCashFlow, setNetCashFlow] = useState(0);
+
+    useEffect(() => {
+        const income = transactions.filter(t => t.type === 'Income').reduce((acc, t) => acc + t.amount, 0);
+        const expenses = transactions.filter(t => t.type === 'Expense').reduce((acc, t) => acc + t.amount, 0);
+        setTotalIncome(income);
+        setTotalExpenses(expenses);
+        if(expenses > 0 && income > 0) {
+            setNetCashFlow(income - expenses);
+        }
+        else if(expenses === 0 && income > 0) {
+            setNetCashFlow(income);
+        }
+        else if(expenses > 0 && income === 0) {
+            setNetCashFlow(-expenses);
+        }
+        else {
+            setNetCashFlow(0);
+        }
+    }, [transactions]);
+
     return (
         <div className="cashflow-dashboard">
             <h1 className="csf-heading">Cash Flow Management</h1>
+            <div className="financial-metrics">
+                <p>Total Income: {totalIncome}</p>
+                <p>Total Expenses: {totalExpenses}</p>
+                <p>Net Cash Flow: {netCashFlow}</p>
+            </div>
+
             <div className="content-area">
                 <div className="row">
-
                     <div className="tabs">
                         <button
                             className={`tab-button ${transactionsView === 'all' ? 'active' : ''}`}
@@ -169,20 +123,17 @@ export default function CashFlow() {
                         </button>                        
                     </div>
 
-
                     <TransactionFormModal
                         isOpen={modalIsOpen}
                         onClose={() => setModalIsOpen(false)}
-                        onSubmit={addTransaction}
+                        onSubmit={handleSubmit}
                         initialData={editingTransaction}
                     />
-
                 </div>
                 <div className="tab-content">
                     {renderContent()}
                 </div>
             </div>
-            
         </div>
     );
 }

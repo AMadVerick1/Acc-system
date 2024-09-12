@@ -6,7 +6,7 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: #130F29;
-  overflow: auto;
+  /* overflow: auto; */
   overflow-x: hidden;
   -ms-overflow-style: none;
   scroll-behavior: smooth;
@@ -30,13 +30,18 @@ code {
   width: 100vw;
 }
 
+.content-container .sidebar{
+  height: 100vh;
+}
+
 main{
   display: flex;
   flex-direction: column;
-  overflow: auto;
+  overflow-y: auto;
   margin-top: 10px;
   margin-left: 0px;
   border-radius: 40px;
+  height: auto;
   width:89vw;
   align-items: center;
 }

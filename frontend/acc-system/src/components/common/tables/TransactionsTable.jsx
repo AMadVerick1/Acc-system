@@ -19,7 +19,7 @@ export default function TransactionsTable({ headers, rows }) {
                     </tr>
                 )): (
                     <tr>
-                        <td colSpan="6">No transactions available</td>
+                        <td colSpan="7">No transactions available</td>
                     </tr>
                 )}
             </tbody>

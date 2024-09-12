@@ -1,17 +1,25 @@
 const Account = require('../models/accountModels');
 
-const getAllAccounts = async (userId) => {
-  return await Account.find({ user: userId });
+const getAllAccounts = async () => {
+  return await Account.find();
 };
 
-const createAccount = async (accountData, userId) => {
-  const { name, balance, accountType } = accountData;
+const getAccountById = async (accountId) => {
+  const account = await Account.findById(accountId);
+  if (!account) {
+    throw new Error('Account not found');
+  }
+  return account;
+}
+
+const createAccount = async (accountData) => {
+  const { name, type, category, balance } = accountData;
 
   const newAccount = new Account({
-    user: userId,
     name,
+    type,
+    category,
     balance,
-    accountType,
   });
 
   return await newAccount.save();
@@ -42,6 +50,7 @@ const deleteAccount = async (accountId) => {
 
 module.exports = {
   getAllAccounts,
+  getAccountById,
   createAccount,
   updateAccount,
   deleteAccount,

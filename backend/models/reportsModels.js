@@ -7,7 +7,7 @@ const reportSchema = new mongoose.Schema({
     },
     type: {
         type: String,
-        enum: ['profit_loss', 'balance_sheet', 'cash_flow', 'custom'],
+        enum: ['Profit_Loss', 'Balance_Sheet', 'Cash_Flow', 'Income_Statement', 'VAT'],
         required: true
     },
     data: {

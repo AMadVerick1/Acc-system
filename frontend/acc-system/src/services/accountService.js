@@ -1,42 +1,53 @@
 import axios from 'axios';
-import api from './api'; // Assuming api is the base URL
+
+const API_BASE_URL = 'http://localhost:5000'; 
 
 export const getAllAccounts = async () => {
   try {
-    const response = await axios.get(`${api}/accounts`);
+    const response = await axios.get(`${API_BASE_URL}/accounts/get-accounts`);
     return response.data;
   } catch (error) {
-    console.error('Error fetching accounts:', error);
-    throw error; // Handle the error accordingly
+    console.error('Error fetching accounts:', error.message);
+    throw error; 
+  }
+};
+
+export const getAccount = async (id) => {
+  try {
+    const response = await axios.get(`${API_BASE_URL}/accounts/get-account/${id}`);
+    return response.data;
+  } catch (error) {
+    console.error('Error fetching account:', error.message);
+    throw error; 
   }
 };
 
 export const createAccount = async (accountData) => {
   try {
-    const response = await axios.post(`${api}/accounts`, accountData);
+    const response = await axios.post(`${API_BASE_URL}/accounts/create-account`, accountData);
     return response.data;
   } catch (error) {
-    console.error('Error creating account:', error);
-    throw error; // Handle the error accordingly
+    console.error('Error creating account:', error.message);
+    throw error; 
   }
 };
 
 export const updateAccount = async (id, updateData) => {
   try {
-    const response = await axios.put(`${api}/accounts/${id}`, updateData);
+    const response = await axios.put(`${API_BASE_URL}/accounts/update-account/${id}`, updateData);
     return response.data;
   } catch (error) {
-    console.error('Error updating account:', error);
-    throw error; // Handle the error accordingly
+    console.error('Error updating account:', error.message);
+    throw error; 
   }
 };
 
 export const deleteAccount = async (id) => {
   try {
-    const response = await axios.delete(`${api}/accounts/${id}`);
+    const response = await axios.delete(`${API_BASE_URL}/accounts/delete-account/${id}`);
     return response.data;
   } catch (error) {
-    console.error('Error deleting account:', error);
-    throw error; // Handle the error accordingly
+    console.error('Error deleting account:', error.message);
+    throw error; 
   }
 };
