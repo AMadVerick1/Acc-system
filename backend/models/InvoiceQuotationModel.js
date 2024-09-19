@@ -1,25 +1,27 @@
 const mongoose = require('mongoose');
 
+// Invoice/Quotation Schema
 const invoiceQuotationSchema = new mongoose.Schema({
-    transactionId: {
+    transactionIds: [
+      {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Transaction', // Link to the Transaction
+        ref: 'Transaction',
         required: true,
-    },
+      },
+    ],
     customerName: { type: String, required: true },
-    customerEmail: { type: String, required: true },
-    type: { type: String, default: 'Invoice', required: true }, // Define whether it's an invoice or quotation
+    customerEmail: { type: String, required: true, match: [/^\S+@\S+\.\S+$/, 'Please use a valid email address.'], unique: true },
+    type: { type: String, default: 'Invoice' },
     items: [
-        {
-            description: { type: String, required: true },
-            quantity: { type: Number, required: true },
-            price: { type: Number, required: true },
-        }
+      {
+        description: { type: String, required: true },
+        quantity: { type: Number, required: true },
+        price: { type: Number, required: true },
+      },
     ],
     totalAmount: { type: Number, required: true },
-    status: { type: String,  default: 'Pending' },
-    createdAt: { type: Date, default: Date.now },
-    updatedAt: { type: Date, default: Date.now },
-});
-
+    status: { type: String, default: 'Pending' },
+}, { timestamps: true });  
+  
 module.exports = mongoose.model('InvoiceQuotation', invoiceQuotationSchema);
+  

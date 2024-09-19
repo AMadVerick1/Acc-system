@@ -1,0 +1,59 @@
+.inv-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 600px;
+  margin: auto;
+}
+
+.item-row {
+  display: flex;
+  gap: 10px;
+  justify-content: space-between;
+}
+
+.add-item-btn, .submit-btn {
+  margin-top: 10px;
+  padding: 8px 12px;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.invoice-container, .quotation-container {
+  max-width: 800px;
+  margin: 20px auto;
+  border: 1px solid #ccc;
+  padding: 20px;
+  background-color: #f9f9f9;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+}
+
+.company-info, .bill-to {
+  margin-top: 10px;
+}
+
+.item-list {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.item-list th, .item-list td {
+  border: 1px solid #ccc;
+  padding: 8px;
+}
+
+.footer {
+  margin-top: 20px;
+}
+
+.bank-details, .total-amount {
+  margin-top: 10px;
+}

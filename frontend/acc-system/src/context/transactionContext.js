@@ -1,16 +1,16 @@
 import React, { createContext, useState, useContext } from 'react';
-import { getAllTransactions, createTransaction, updateTransaction, deleteTransaction } from '../services/transactionServices';
+import { getAllTransactions, getTransactionById, createTransaction, updateTransaction, deleteTransaction } from '../services/transactionServices';
 
 const TransactionContext = createContext();
 
 export const TransactionContextProvider = ({ children }) => {
     const [transactions, setTransactions] = useState([]);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState(null); // Error state
+    const [error, setError] = useState(null);
 
     const fetchAllTransactions = async () => {
         setLoading(true);
-        setError(null); // Reset error before fetching
+        setError(null);
         try {
             const data = await getAllTransactions();
             setTransactions(data);
@@ -19,6 +19,16 @@ export const TransactionContextProvider = ({ children }) => {
             setError('Failed to fetch transactions. Please try again later.');
         } finally {
             setLoading(false);
+        }
+    };
+
+    const getTransactionByID = async (id) => {
+        try {
+            const transaction = await getTransactionById(id);
+            return transaction;
+        } catch (error) {
+            console.error('Failed to fetch transaction:', error);
+            setError('Failed to fetch transaction. Please try again.');
         }
     };
 
@@ -55,7 +65,7 @@ export const TransactionContextProvider = ({ children }) => {
     };
 
     return (
-        <TransactionContext.Provider value={{ transactions, fetchAllTransactions, addTransaction, editTransaction, removeTransaction, loading, error }}>
+        <TransactionContext.Provider value={{ transactions, fetchAllTransactions, getTransactionByID, addTransaction, editTransaction, removeTransaction, loading, error }}>
             {children}
         </TransactionContext.Provider>
     );

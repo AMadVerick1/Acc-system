@@ -9,9 +9,18 @@ const getTransactions = async (req, res) => {
   }
 };
 
+const getTransaction = async (req, res) => {
+  try {
+    const transaction = await transactionService.getTransactionById(req.params.id);
+    res.status(200).json(transaction);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
 const createTransaction = async (req, res) => {
   try {
-    const newTransaction = await transactionService.createTransaction(req.body );
+    const newTransaction = await transactionService.createTransaction(req.body);
     res.status(201).json(newTransaction);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -20,8 +29,8 @@ const createTransaction = async (req, res) => {
 
 const updateTransaction = async (req, res) => {
   try {
-    const updatedTransaction = await transactionService.updateTransaction(req.body);
-    res.status(201).json(updatedTransaction);
+    const updatedTransaction = await transactionService.updateTransaction(req.params.id, req.body); // Include ID and body
+    res.status(200).json(updatedTransaction);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -30,7 +39,7 @@ const updateTransaction = async (req, res) => {
 const deleteTransaction = async (req, res) => {
   try {
     const deletedTransaction = await transactionService.deleteTransaction(req.params.id);
-    res.status(201).json(deletedTransaction);
+    res.status(200).json(deletedTransaction); // Status code should be 200 or 204
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -38,7 +47,8 @@ const deleteTransaction = async (req, res) => {
 
 module.exports = {
   getTransactions,
+  getTransaction,
   createTransaction,
   updateTransaction,
   deleteTransaction,
-}
+};

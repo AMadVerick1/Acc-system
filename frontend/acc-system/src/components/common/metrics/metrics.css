@@ -1,11 +1,9 @@
 /* Key metrics css */
 
-
 .key-metrics {
     display: flex;
     flex-direction: column;
     gap: 20px;
-    /* justify-content: space-around; */
     margin-bottom: 20px;
 }
 
@@ -13,16 +11,6 @@
     display: flex;
     justify-content: space-between;
     gap: 20px;
-}
-
-.metric-card {
-    background: linear-gradient(145deg, rgba(255, 255, 255, 0.4),rgba(255, 255, 255, 0)) ;
-    box-shadow:  1px 4px 15px rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(30px);
-    padding: 20px;
-    border-radius: 8px;
-    text-align: center;
-    width: 200px;
 }
 
 .metric-card h3 {
@@ -35,5 +23,57 @@
     font-weight: bold;
 }
 
+/* Financial Health Indicators */
 
-/*  */
+.health-indicators {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+}
+
+.indicator-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.4),rgba(255, 255, 255, 0)) ;
+    box-shadow:  1px 4px 15px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(30px);
+    border-radius: 8px;
+    padding: 20px;
+}
+
+.indicator-card h3 {
+    margin-bottom: 10px;
+    font-size: 1.2em;
+}
+
+.indicator-card p {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+
+/* Insights */
+
+.insights-page {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.insights-page h2 {
+    font-size: 1.5em;
+    margin-bottom: 10px;
+    text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5), -2px -2px 2px rgba(0, 0, 0, 0.5);
+}
+
+.insights-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.insight-card {
+    background: linear-gradient(145deg, rgba(255, 255, 255, 0.4),rgba(255, 255, 255, 0)) ;
+    box-shadow:  1px 4px 15px rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(30px);
+    border-radius: 8px;
+    padding: 20px;
+}

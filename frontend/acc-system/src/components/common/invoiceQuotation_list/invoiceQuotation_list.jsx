@@ -3,15 +3,19 @@ import TransactionsTable from '../tables/TransactionsTable';
 import InvoiceQuotationForm from '../forms/invoiceQuotationForm';
 import { useAccounts } from '../../../context/accountContext';
 import { useTransactions } from '../../../context/transactionContext';
+import { useInvoiceQuotation } from '../../../context/invoiceQuotationContext';
+import { PDFDownloadLink } from '@react-pdf/renderer'; // For generating PDF
+import './invoiceQuotation_list.css';
 
-export default function AllTransactions({ transactions, onEdit }) {
+export default function InvoiceQuotationList({ transactions, onEdit }) {
     const { removeTransaction } = useTransactions();
-    const { accounts, fetchAccounts } = useAccounts(); // Destructure correctly
+    const { accounts, fetchAccounts } = useAccounts();
+    const { removeInvoiceQuotation } = useInvoiceQuotation();
     const [transactionRows, setTransactionRows] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
-    const [formType, setFormType] = useState(null); // 'Invoice' or 'Quotation'
+    const [formType, setFormType] = useState('Invoice'); // 'Invoice' or 'Quotation'
 
-    const headers = ['Date', 'Account Name', 'Description', 'Source', 'Amount', 'Status', 'Actions'];
+    const headers = ['Date', 'Customer Name', 'Customer Email', 'Description', 'Amount', 'Due', 'Status', 'Actions'];
 
     useEffect(() => {
         console.log('Fetching account names and processing transactions...');
@@ -20,18 +24,21 @@ export default function AllTransactions({ transactions, onEdit }) {
                 await fetchAccounts(); // Ensure accounts are fetched
                 const rowsWithAccountNames = await Promise.all(
                     transactions.map(async (transaction) => {
-                        const { date, account, description, source, amount, status } = transaction;
+                        const { date, customer, description, amount, due, status } = transaction;
                         try {
                             // Find the account name based on the account ID
-                            const accountObj = accounts.find(acc => acc._id === account);
-                            const accountName = accountObj ? accountObj.name : 'Unknown Account'; // Extract account name
-                            console.log(`Transaction ${transaction._id}: Account name is ${accountName}`);
+                            const customerObj = accounts.find(acc => acc._id === customer);
+                            const customerName = customerObj ? customerObj.name : 'Unknown Account'; // Extract account name
+                            const customerEmail = customerObj ? customerObj.email : '';
+                            console.log(`Transaction ${transaction._id}: Account name is ${customerName}`);
+
                             return [
                                 date,
-                                accountName,
+                                customerName,
+                                customerEmail,
                                 description,
-                                source,
-                                `R${amount}`, 
+                                `R${amount}`,
+                                `R${due}`,
                                 status,
                                 <>
                                     <button onClick={() => onEdit(transaction)}>Edit</button>
@@ -44,16 +51,16 @@ export default function AllTransactions({ transactions, onEdit }) {
                             console.error('Error processing transaction:', error);
                             return [
                                 date,
-                                'Error', // Fallback in case of error
+                                'Error',
+                                '',
                                 description,
-                                source,
                                 `R${amount}`,
+                                `R${due}`,
                                 status,
                                 <>
                                     <button onClick={() => onEdit(transaction)}>Edit</button>
                                     <button onClick={() => removeTransaction(transaction._id)}>Delete</button>
                                     <button onClick={() => handleGenerateInvoiceQuotation(transaction, 'Invoice')}>Generate Invoice</button>
-                                    <button onClick={() => handleGenerateInvoiceQuotation(transaction, 'Quotation')}>Generate Quotation</button>
                                 </>
                             ];
                         }
@@ -66,29 +73,28 @@ export default function AllTransactions({ transactions, onEdit }) {
         };
 
         fetchAccountNames();
-    }, []); // Updated dependencies
+    }, [transactions, accounts, fetchAccounts, onEdit, removeTransaction]); // Updated dependencies
 
     const handleGenerateInvoiceQuotation = (transaction, type) => {
+        setSelectedTransaction(transaction);
+        setFormType(type);
         console.log(`Generating ${type} for transaction ${transaction._id}`);
-        setSelectedTransaction(transaction); // Set the entire transaction object
-        setFormType(type); // Set whether it's an invoice or quotation
-    };
-
-    const handleCloseForm = () => {
-        setSelectedTransaction(null); // Reset the selected transaction when closing the form
-        setFormType(null); // Reset the form type
     };
 
     return (
-        <div className="all-transactions">
+        <div className="invoice-quotation-list">
             <TransactionsTable headers={headers} rows={transactionRows} />
-            {selectedTransaction && formType && (
-                <div className="invoice-quotation-modal">
-                    <InvoiceQuotationForm
-                        transaction={selectedTransaction}
-                        type={formType}
-                        onClose={handleCloseForm} // Pass a close function to the form
-                    />
+
+            {selectedTransaction && (
+                <div className="pdf-download-section">
+                    <PDFDownloadLink
+                        document={<InvoiceQuotationForm transactionId={selectedTransaction._id} type={formType} />}
+                        fileName={`${formType}-${selectedTransaction._id}.pdf`}
+                    >
+                        {({ loading }) =>
+                            loading ? 'Loading PDF...' : `Download ${formType} as PDF`
+                        }
+                    </PDFDownloadLink>
                 </div>
             )}
         </div>

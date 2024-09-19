@@ -4,7 +4,11 @@ import AccountForm from './accountsForm';
 import './tr_style.css';
 
 export default function TransactionForm({ onSubmit, initialData }) {
-    const { accounts, fetchAccounts } = useAccounts(); // Get the accounts from context
+    const { accounts, fetchAccounts } = useAccounts();
+    const [formType, setFormType] = useState('Transaction');
+    const [invoiceItems, setInvoiceItems] = useState([{ description: '', quantity: 1, price: 0 }]);
+
+    const handleFormTypeChange = (e) => setFormType(e.target.value);
 
     const [formData, setFormData] = useState({
         account: initialData?.account || '',
@@ -18,90 +22,63 @@ export default function TransactionForm({ onSubmit, initialData }) {
 
     const [showAccountForm, setShowAccountForm] = useState(false);
 
-    // Log when the component mounts and initial state
     useEffect(() => {
-        console.log('TransactionForm mounted');
-        console.log('Initial formData:', formData);
-        fetchAccounts()
-            .then(() => {
-                console.log('Fetched accounts successfully:', accounts);
-            })
-            .catch((error) => {
-                console.error('Error fetching accounts:', error);
-            });
-    }, []); // Empty dependency array ensures this runs once on mount
+        fetchAccounts();
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(`Field changed: ${name} = ${value}`);
         setFormData({ ...formData, [name]: value });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('TransactionForm submitted with formData:', formData);
-        onSubmit(formData);  // Pass formData back to the parent component
+        if (formType === 'Invoice' || formType === 'Quotation') {
+            const totalAmount = invoiceItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+            onSubmit({ ...formData, amount: totalAmount, items: invoiceItems });
+        } else {
+            onSubmit(formData);
+        }
     };
 
     const handleCreateAccount = (accountData) => {
-        console.log('Creating new account with data:', accountData);
-
-        // Simulate account creation delay
-        setTimeout(() => {
-            console.log("Account created successfully:", accountData);
-            setShowAccountForm(false); // Hide account form after creation
-            fetchAccounts()
-                .then(() => {
-                    console.log('Accounts list refreshed:', accounts);
-                })
-                .catch((error) => {
-                    console.error('Error refreshing accounts:', error);
-                });
-        }, 1000);
-    };
-
-    const handleShowAccountForm = () => {
-        console.log('Show AccountForm triggered');
-        setShowAccountForm(true);
-    };
-
-    const handleHideAccountForm = () => {
-        console.log('Hide AccountForm triggered');
         setShowAccountForm(false);
+        fetchAccounts();
+    };
+
+    const handleInvoiceItemChange = (index, field, value) => {
+        const updatedItems = [...invoiceItems];
+        updatedItems[index][field] = value;
+        setInvoiceItems(updatedItems);
+    };
+
+    const addInvoiceItem = () => {
+        setInvoiceItems([...invoiceItems, { description: '', quantity: 1, price: 0 }]);
     };
 
     if (showAccountForm) {
-        // Render AccountForm when showAccountForm is true
-        console.log('Rendering AccountForm');
         return (
             <div className="account-form-container">
                 <h2>Create a New Account</h2>
                 <AccountForm onSubmit={handleCreateAccount} />
-                <button onClick={handleHideAccountForm} className="btn-back">
+                <button onClick={() => setShowAccountForm(false)} className="btn-back">
                     Back to Transaction Form
                 </button>
             </div>
         );
     }
 
-    if (accounts.length === 0) {
-        // No accounts available and not showing AccountForm
-        console.log('No accounts available, prompting user to create one');
-        return (
-            <div className="no-accounts">
-                <h2>No Accounts Found</h2>
-                <p>Please create an account before adding a transaction.</p>
-                <button onClick={handleShowAccountForm} className="btn-create-account">
-                    Create New Account
-                </button>
-            </div>
-        );
-    }
-
-    // Default render when showAccountForm is false and accounts exist
-    console.log('Rendering TransactionForm with existing accounts');
     return (
         <form onSubmit={handleSubmit} className="transaction-form">
+                {/* <div className="form-group">
+                    <label htmlFor="formType">Form Type:</label>
+                    <select id="formType" value={formType} onChange={handleFormTypeChange}>
+                        <option value="Transaction">Transaction</option>
+                        <option value="Invoice">Invoice</option>
+                        <option value="Quotation">Quotation</option>
+                    </select>
+                </div> */}
+
             <div className="form-group">
                 <label htmlFor="account">Account:</label>
                 <select
@@ -118,7 +95,7 @@ export default function TransactionForm({ onSubmit, initialData }) {
                         </option>
                     ))}
                 </select>
-                <button type="button" onClick={handleShowAccountForm} className="btn-create-account">
+                <button type="button" onClick={() => setShowAccountForm(true)} className="btn-create-account">
                     + Create New Account
                 </button>
             </div>
@@ -147,42 +124,78 @@ export default function TransactionForm({ onSubmit, initialData }) {
                 />
             </div>
 
-            <div className="form-group">
-                <label htmlFor="source">Source:</label>
-                <input
-                    type="text"
-                    id="source"
-                    name="source"
-                    value={formData.source}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
+            {formType === 'Transaction' ? (
+                <>
+                    <div className="form-group">
+                        <label htmlFor="source">Source:</label>
+                        <input
+                            type="text"
+                            id="source"
+                            name="source"
+                            value={formData.source}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
 
-            <div className="form-group">
-                <label htmlFor="amount">Amount:</label>
-                <input
-                    type="number"
-                    id="amount"
-                    name="amount"
-                    value={formData.amount}
-                    onChange={handleChange}
-                    required
-                />
-            </div>
+                    <div className="form-group">
+                        <label htmlFor="amount">Amount:</label>
+                        <input
+                            type="number"
+                            id="amount"
+                            name="amount"
+                            value={formData.amount}
+                            onChange={handleChange}
+                            required
+                        />
+                    </div>
 
-            <div className="form-group">
-                <label htmlFor="type">Transaction Type:</label>
-                <select
-                    id="type"
-                    name="type"
-                    value={formData.type}
-                    onChange={handleChange}
-                >
-                    <option value="Income">Income</option>
-                    <option value="Expense">Expense</option>
-                </select>
-            </div>
+                    <div className="form-group">
+                        <label htmlFor="type">Transaction Type:</label>
+                        <select
+                            id="type"
+                            name="type"
+                            value={formData.type}
+                            onChange={handleChange}
+                        >
+                            <option value="Income">Income</option>
+                            <option value="Expense">Expense</option>
+                        </select>
+                    </div>
+                </>
+            ) : (
+                <>
+                    <h3>{formType} Details</h3>
+                    {invoiceItems.map((item, index) => (
+                        <div key={index} className="invoice-item">
+                            <input
+                                type="text"
+                                placeholder="Description"
+                                value={item.description}
+                                onChange={(e) => handleInvoiceItemChange(index, 'description', e.target.value)}
+                            />
+                            <input
+                                type="number"
+                                placeholder="Quantity"
+                                value={item.quantity}
+                                onChange={(e) => handleInvoiceItemChange(index, 'quantity', e.target.value)}
+                            />
+                            <input
+                                type="number"
+                                placeholder="Price"
+                                value={item.price}
+                                onChange={(e) => handleInvoiceItemChange(index, 'price', e.target.value)}
+                            />
+                        </div>
+                    ))}
+                    <button type="button" onClick={addInvoiceItem}>
+                        + Add Item
+                    </button>
+                    <p>
+                        Total Amount: {invoiceItems.reduce((sum, item) => sum + item.quantity * item.price, 0)}
+                    </p>
+                </>
+            )}
 
             <div className="form-group">
                 <label htmlFor="status">Status:</label>
@@ -199,7 +212,7 @@ export default function TransactionForm({ onSubmit, initialData }) {
                 </select>
             </div>
 
-            <button type="submit" className="btn-submit">Save Transaction</button>
+            <button type="submit" className="btn-submit">Save {formType}</button>
         </form>
     );
 }

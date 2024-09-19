@@ -18,7 +18,7 @@ export default function FinancialOverview() {
             case 'financial':
                 return (
                     <div className="financial-overview-content">
-                        <KeyMetrics />
+                        {/* <KeyMetrics /> */}
                         <IncomeExpenseChart />
                         <HealthIndicators />
                         <Insights />

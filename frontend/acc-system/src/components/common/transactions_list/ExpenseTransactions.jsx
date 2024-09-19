@@ -32,9 +32,7 @@ function ExpenseTransactions({ transactions, onEdit }) {
                                 `R${amount}`,
                                 status,
                                 <>
-                                    <button onClick={() => onEdit(transaction)}>Edit</button>
-                                    <button onClick={() => handleGenerateInvoiceQuotation(transaction, 'Invoice')}>Invoice</button>
-                                    <button onClick={() => handleGenerateInvoiceQuotation(transaction, 'Quotation')}>Quotation</button>
+                                    <button onClick={() => onEdit(transaction)}>Edit</button> 
                                 </>
                             ];
                         } catch (error) {
@@ -48,8 +46,6 @@ function ExpenseTransactions({ transactions, onEdit }) {
                                 status,
                                 <>
                                     <button onClick={() => onEdit(transaction)}>Edit</button>
-                                    <button onClick={() => handleGenerateInvoiceQuotation(transaction, 'Invoice')}>Invoice</button>
-                                    <button onClick={() => handleGenerateInvoiceQuotation(transaction, 'Quotation')}>Quotation</button>
                                 </>
                             ];
                         }

@@ -1,39 +1,87 @@
-const Transaction = require('../models/transactionsModels');
+const Transactions = require('../models/transactionsModels');
 
+// Fetch all transactions
 const getAllTransactions = async () => {
-  return await Transaction.find({});
+  try {
+    return await Transactions.find();
+  } catch (error) {
+    console.error('Error fetching transactions:', error);
+    throw new Error('Failed to fetch transactions');
+  }
 };
 
+// Fetch a transaction by ID
+const getTransactionById = async (id) => {
+  try {
+    const transaction = await Transactions.findById(id);
+    if (!transaction) {
+      throw new Error('Transaction not found');
+    }
+    return transaction;
+  } catch (error) {
+    if (error.kind === 'ObjectId') {
+      throw new Error('Invalid transaction ID');
+    }
+    console.error('Error fetching transaction by ID:', error);
+    throw new Error('Error fetching transaction');
+  }
+};
+
+// Create a new transaction
 const createTransaction = async (transactionData) => {
-  const transaction = new Transaction(transactionData);
-  return await transaction.save();
+  try {
+    const transaction = new Transactions(transactionData);
+    return await transaction.save();
+  } catch (error) {
+    console.error('Error creating transaction:', error);
+    throw new Error('Failed to create transaction');
+  }
 };
 
+// Update a transaction by ID
 const updateTransaction = async (id, updatedData) => {
-  const transaction = await Transaction.findByIdAndUpdate(id, updatedData, {
-    new: true,
-    runValidators: true, // Ensures data consistency
-  });
+  try {
+    const transaction = await Transactions.findByIdAndUpdate(id, updatedData, {
+      new: true,
+      runValidators: true, // Ensures data consistency
+    });
 
-  if (!transaction) {
-    throw new Error('Transaction not found');
+    if (!transaction) {
+      throw new Error('Transaction not found');
+    }
+
+    return transaction;
+  } catch (error) {
+    if (error.kind === 'ObjectId') {
+      throw new Error('Invalid transaction ID');
+    }
+    console.error('Error updating transaction:', error);
+    throw new Error('Failed to update transaction');
   }
-
-  return transaction;
 };
 
+// Delete a transaction by ID
 const deleteTransaction = async (id) => {
-  const transaction = await Transaction.findByIdAndDelete(id);
+  try {
+    const transaction = await Transactions.findByIdAndDelete(id);
 
-  if (!transaction) {
-    throw new Error('Transaction not found');
+    if (!transaction) {
+      throw new Error('Transaction not found');
+    }
+
+    return transaction;
+  } catch (error) {
+    if (error.kind === 'ObjectId') {
+      throw new Error('Invalid transaction ID');
+    }
+    console.error('Error deleting transaction:', error);
+    throw new Error('Failed to delete transaction');
   }
-
-  return transaction;
 };
 
 module.exports = {
   getAllTransactions,
+  getTransactionById,
   createTransaction,
   updateTransaction,
   deleteTransaction,

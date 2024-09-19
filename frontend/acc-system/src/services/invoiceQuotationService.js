@@ -8,17 +8,39 @@ export const createInvoiceQuotation = async (invoiceQuotationData) => {
         return response.data;
     } catch (error) {
         console.error('Error creating invoice/quotation:', error);
-        throw error;
+        throw error.response ? error.response.data : error.message;
     }
 };
 
+
+export const getInvoiceQuotationById = async (id) => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/invoice-quotation/get/${id}`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching invoice/quotation:', error);
+        throw error.response ? error.response.data : error.message;
+    }
+};
+
+export const getAllInvoiceQuotations = async () => {
+    try {
+        const response = await axios.get(`${API_BASE_URL}/invoice-quotation/getAll`);
+        return response.data;
+    } catch (error) {
+        console.error('Error fetching all invoices/quotations:', error);
+        throw error.response ? error.response.data : error.message;
+    }
+};
+
+
 export const getInvoicesQuotations = async (type) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/invoice-quotation/${type}`);
+        const response = await axios.get(`${API_BASE_URL}/invoice-quotation/get/type/${type}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching invoices/quotations:', error);
-        throw error;
+        throw error.response ? error.response.data : error.message;
     }
 };
 
@@ -28,7 +50,7 @@ export const updateInvoiceQuotation = async (id, invoiceQuotationData) => {
         return response.data;
     } catch (error) {
         console.error('Error updating invoice/quotation:', error);
-        throw error;
+        throw error.response ? error.response.data : error.message;
     }
 }
 
@@ -38,6 +60,6 @@ export const deleteInvoiceQuotation = async (id) => {
         return response.data;
     } catch (error) {
         console.error('Error deleting invoice/quotation:', error);
-        throw error;
+        throw error.response ? error.response.data : error.message;
     }
 }

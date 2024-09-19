@@ -1,11 +1,13 @@
 const express = require('express');
-const { createInvoiceQuotation, getInvoicesQuotations, updateInvoiceQuotation } = require('../controllers/InvoiceQuotationController');
+const { createInvoiceQuotation, getInvoicesQuotations, getInvoiceQuotationById, updateInvoiceQuotation, deleteInvoiceQuotation, getAllInvoiceQuotations } = require('../controllers/InvoiceQuotationController');
 
 const router = express.Router();
 
-router.post('/create', createInvoiceQuotation); // Create Invoice/Quotation
-router.get('/:type', getInvoicesQuotations); // Get Invoices/Quotations based on type
-router.put('/update/:id', updateInvoiceQuotation); // Update Invoice/Quotation
-router.delete('/delete/:id', updateInvoiceQuotation); // Delete Invoice/Quotation
+router.post('/create', createInvoiceQuotation);
+router.get('/get/type/:type', getInvoicesQuotations); 
+router.get('/getAll', getAllInvoiceQuotations);
+router.get('/get/:id', getInvoiceQuotationById);
+router.put('/update/:id', updateInvoiceQuotation);
+router.delete('/delete/:id', deleteInvoiceQuotation);
 
 module.exports = router;

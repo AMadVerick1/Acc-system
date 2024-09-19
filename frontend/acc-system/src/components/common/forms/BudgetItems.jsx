@@ -91,7 +91,7 @@ const AddBudgetForm = () => {
 
   return (
     <form onSubmit={handleSubmit} className="add-budget-form">
-      <h3>Add New Budget</h3>
+      {/* <h3>Add New Budget</h3> */}
 
       <div>
         <label>Budget Name</label>

@@ -19,17 +19,18 @@ export const getTransactionById = async (id) => {
         const response = await axios.get(`${API_BASE_URL}/transactions/get-transaction/${id}`);
         return response.data;
     } catch (error) {
-        console.error(`Error fetching transaction with ID ${id}:`, error);
+        console.error(`Error fetching transaction with ID ${id}:`, error.response?.data?.message || error.message);
         throw error;
     }
 };
+
 // Create a New Transaction
 export const createTransaction = async (transactionData) => {
   try {
       const response = await axios.post(`${API_BASE_URL}/transactions/create-transaction`, transactionData);
       return response.data;
   } catch (error) {
-      console.error('Error creating transaction:', error);
+      console.error('Error creating transaction:', error.response?.data?.message || error.message);
       throw error;
   }
 };
@@ -40,7 +41,7 @@ export const updateTransaction = async (id, updateData) => {
       const response = await axios.put(`${API_BASE_URL}/transactions/update-transaction/${id}`, updateData);
       return response.data;
   } catch (error) {
-      console.error(`Error updating transaction with ID ${id}:`, error);
+      console.error(`Error updating transaction with ID ${id}:`, error.response?.data?.message || error.message);
       throw error;
   }
 };
@@ -51,7 +52,7 @@ export const deleteTransaction = async (id) => {
       const response = await axios.delete(`${API_BASE_URL}/transactions/delete-transaction/${id}`);
       return response.data;
   } catch (error) {
-      console.error(`Error deleting transaction with ID ${id}:`, error);
+      console.error(`Error deleting transaction with ID ${id}:`, error.response?.data?.message || error.message);
       throw error;
   }
 };
