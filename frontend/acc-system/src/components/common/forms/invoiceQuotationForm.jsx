@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useAccounts } from '../../../context/accountContext';
 import { PDFDownloadLink, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
+// import {useInvoiceQuotationContext} from '../../../context/invoiceQuotationContext';
 import './invQuo.css';
 
 // Define PDF styles
@@ -12,15 +12,14 @@ const styles = StyleSheet.create({
     tableCell: { width: '25%' }
 });
 
-// PDF Component
 const InvoiceDocument = ({ formData, type, transactionId }) => (
     <Document>
-        <Page style={styles.page}>
-            <View style={styles.section}>
-                <Text>{type} No: {transactionId}</Text>
+        <Page className="invoice-container" style={styles.page}>
+            <View className="inv_num" style={styles.section}>
+                <Text>{type} No: {transactionId || 'N/A'}</Text>
                 <Text>Date: {new Date().toLocaleDateString()}</Text>
             </View>
-            <View style={styles.section}>
+            <View className="company-info" style={styles.section}>
                 <Text>MORIPE BUSINESS TRAINING & CONSULTANT PTY LTD</Text>
                 <Text>Enterprise Development Solutions</Text>
                 <Text>101 First Rd, Roda, Dasnato, 2090</Text>
@@ -28,11 +27,11 @@ const InvoiceDocument = ({ formData, type, transactionId }) => (
                 <Text>Email: info@moripe.co.za</Text>
                 <Text>VAT Number: 123456789</Text>
             </View>
-            <View style={styles.section}>
+            <View className="bill-to" style={styles.section}>
                 <Text>Bill To: {formData.customerName}</Text>
                 <Text>Email: {formData.customerEmail}</Text>
             </View>
-            <View style={styles.section}>
+            <View className="item-list" style={styles.section}>
                 <Text>Items:</Text>
                 <View style={styles.tableHeader}>
                     <Text style={styles.tableCell}>Description</Text>
@@ -52,7 +51,7 @@ const InvoiceDocument = ({ formData, type, transactionId }) => (
             <View style={styles.section}>
                 <Text>Total: {formData.total.toFixed(2)}</Text>
             </View>
-            <View style={styles.section}>
+            <View className="bank-details" style={styles.section}>
                 <Text>Bank Details:</Text>
                 <Text>Bank Name: {formData.bankName}</Text>
                 <Text>Account Number: {formData.accountNumber}</Text>
@@ -63,52 +62,62 @@ const InvoiceDocument = ({ formData, type, transactionId }) => (
     </Document>
 );
 
-export default function InvoiceQuotationForm({ transactionId, type }) {
-    const { accounts, getAccountById } = useAccounts();
-
-    // Fetch account data
-    useEffect(() => {
-        getAccountById()
-            .then(() => console.log('Account data fetched successfully:', accounts))
-            .catch((error) => console.error('Error fetching account data:', error));
-    }, []);
-
+export default function InvoiceQuotationForm({ onSubmit }) {
     const [formData, setFormData] = useState({
-        customerName: accounts?.name || '',
+        customerName: '',
         customerEmail: '',
+        type: 'Invoice',
         items: [{ description: '', quantity: 1, price: 0 }],
+        total: 0,
         bankName: '',
         accountNumber: '',
         branchName: '',
-        branchCode: '',
-        total: 0,
+        branchCode: ''
     });
 
+    // Recalculate total whenever items change
     useEffect(() => {
-        const total = formData.items.reduce(
-            (acc, item) => acc + item.quantity * item.price, 
-            0
-        );
+        const total = formData.items.reduce((acc, item) => acc + item.quantity * item.price, 0);
         setFormData((prev) => ({ ...prev, total }));
     }, [formData.items]);
 
-    const handleChange = (e) => {
-        setFormData({ ...formData, [e.target.name]: e.target.value });
-    };
+    // Generic handle change for form inputs
+    const handleChange = (e) => setFormData({ ...formData, [e.target.name]: e.target.value });
 
+    // Handle item-specific change
     const handleItemChange = (index, e) => {
         const updatedItems = [...formData.items];
         updatedItems[index][e.target.name] = e.target.value;
         setFormData({ ...formData, items: updatedItems });
     };
 
-    const handleAddItem = () => {
-        setFormData({ ...formData, items: [...formData.items, { description: '', quantity: 1, price: 0 }] });
+    // Handle form submission
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        const transactionData = {
+            account: formData.type, // Use type as account
+            date: new Date(), // Current date
+            description: formData.items.map(item => item.description).join(', '), // Concatenate item descriptions
+            source: formData.customerName, // Use customer name as source
+            amount: formData.total, // Total amount
+            status: 'Pending', // Default status
+            type: formData.type === 'Invoice' ? 'Income' : 'Expense', // Set type based on formData.type
+        };
+        
+        onSubmit(transactionData, formData);
     };
 
     return (
         <>
-            <form className="inv-form">
+            <form onSubmit={handleSubmit} className="inv-form">
+                <label htmlFor="type">Type</label>
+                <select name="type" value={formData.type} onChange={handleChange}>
+                    <option value="Invoice">Invoice</option>
+                    <option value="Quotation">Quotation</option>
+                </select>
+
+                <label htmlFor="customerName">Customer Name</label>
                 <input
                     type="text"
                     name="customerName"
@@ -116,6 +125,8 @@ export default function InvoiceQuotationForm({ transactionId, type }) {
                     onChange={handleChange}
                     placeholder="Customer Name"
                 />
+
+                <label htmlFor="customerEmail">Customer Email</label>
                 <input
                     type="email"
                     name="customerEmail"
@@ -126,6 +137,7 @@ export default function InvoiceQuotationForm({ transactionId, type }) {
 
                 {formData.items.map((item, index) => (
                     <div key={index} className="item-row">
+                        <label htmlFor="description">Description</label>
                         <input
                             type="text"
                             name="description"
@@ -133,6 +145,7 @@ export default function InvoiceQuotationForm({ transactionId, type }) {
                             onChange={(e) => handleItemChange(index, e)}
                             placeholder="Description"
                         />
+                        <label htmlFor="quantity">Quantity</label>
                         <input
                             type="number"
                             name="quantity"
@@ -140,6 +153,7 @@ export default function InvoiceQuotationForm({ transactionId, type }) {
                             onChange={(e) => handleItemChange(index, e)}
                             placeholder="Quantity"
                         />
+                        <label htmlFor="price">Price</label>
                         <input
                             type="number"
                             name="price"
@@ -150,17 +164,18 @@ export default function InvoiceQuotationForm({ transactionId, type }) {
                     </div>
                 ))}
 
-                <button type="button" onClick={handleAddItem} className="add-item-btn">
-                    Add Item
+                <button type="submit">
+                    Save {formData.type}
                 </button>
-
-                <PDFDownloadLink
-                    document={<InvoiceDocument formData={formData} type={type} transactionId={transactionId} />}
-                    fileName={`${type}-${transactionId}.pdf`}
-                >
-                    {({ loading }) => loading ? 'Loading document...' : `Download ${type}`}
-                </PDFDownloadLink>
             </form>
+
+            {/* Add PDF Generation */}
+            <PDFDownloadLink
+                document={<InvoiceDocument formData={formData} type={formData.type} transactionId="" />}
+                fileName={`${formData.type}.pdf`}
+            >
+                {({ loading }) => (loading ? 'Generating PDF...' : 'Download PDF')}
+            </PDFDownloadLink>
         </>
     );
 }

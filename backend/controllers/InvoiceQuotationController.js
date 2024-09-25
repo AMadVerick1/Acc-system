@@ -1,40 +1,24 @@
 const invoiceQuotationService = require('../services/invoiceQuotationService.js');
+const InvoiceQuotation = require('../models/InvoiceQuotationModel'); 
 
 const createInvoiceQuotation = async (req, res) => {
     try {
-        const invoiceQuotation = await invoiceQuotationService.createInvoiceQuotation(req.body);
+        const { type, ...restData } = req.body;
+        const invoiceQuotation = new InvoiceQuotation({ type, ...restData });
+        await invoiceQuotation.save();
         res.status(201).json(invoiceQuotation);
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
 };
 
-const getAllInvoiceQuotations = async (req, res) => {
+const getInvoiceQuotations = async (req, res) => {
     try {
         const invoiceQuotations = await invoiceQuotationService.getAllInvoiceQuotations();
         res.status(200).json(invoiceQuotations);
     } catch (error) {
         res.status(500).json({ message: error.message });
     } 
-}
-
-const getInvoiceQuotationById = async (req, res) => {
-    try {
-        const invoiceQuotation = await invoiceQuotationService.getInvoiceQuotationById(req.params.id);
-        res.status(200).json(invoiceQuotation);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
-};
-
-const getInvoicesQuotations = async (req, res) => {
-    try {
-        const type = req.params.type;
-        const invoicesQuotations = await invoiceQuotationService.getAllInvoiceQuotations(type);
-        res.status(200).json(invoicesQuotations);
-    } catch (error) {
-        res.status(500).json({ message: error.message });
-    }
 };
 
 const updateInvoiceQuotation = async (req, res) => {
@@ -57,9 +41,7 @@ const deleteInvoiceQuotation = async (req, res) => {
 
 module.exports = {
     createInvoiceQuotation,
-    getInvoicesQuotations,
-    getAllInvoiceQuotations,
-    getInvoiceQuotationById,
+    getInvoiceQuotations,
     updateInvoiceQuotation,
     deleteInvoiceQuotation
-}
+};

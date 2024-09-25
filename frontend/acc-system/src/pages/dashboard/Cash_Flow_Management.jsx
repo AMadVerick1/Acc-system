@@ -3,17 +3,19 @@ import AllTransactions from '../../components/common/transactions_list/AllTransa
 import IncomeTransactions from '../../components/common/transactions_list/IncomeTransactions.jsx';
 import ExpenseTransactions from '../../components/common/transactions_list/ExpenseTransactions.jsx';
 import TransactionFormModal from '../../components/common/modals/TransactionsModal.jsx';
+// import { useInvoiceQuotationContext } from '../../context/invoiceQuotationContext.js';
 import { useTransactions } from '../../context/transactionContext';
 import { useAccounts } from '../../context/accountContext';
+
 import Cards from '../../components/common/card/cards'; // Import the Cards component
 
 export default function CashFlow() {
-    const { transactions, fetchAllTransactions, addTransaction, editTransaction, removeTransaction, error, loading } = useTransactions();
+    const { transactions, fetchAllTransactions, addTransaction, editTransaction, error, loading } = useTransactions();
+    // const { invoiceQuotation, fetchAllInvoiceQuotations, addInvoiceQuotation, editInvoiceQuotation } = useInvoiceQuotationContext();
     const { accounts, fetchAccounts } = useAccounts();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState(null);
     const [transactionsView, setTransactionsView] = useState('all');
-
     const [totalIncome, setTotalIncome] = useState(0);
     const [totalExpenses, setTotalExpenses] = useState(0);
     const [netCashFlow, setNetCashFlow] = useState(0);
@@ -21,19 +23,20 @@ export default function CashFlow() {
 
     useEffect(() => {
         fetchAllTransactions();
+        // fetchAllInvoiceQuotations();
         fetchAccounts();
     }, []);
 
     useEffect(() => {
-        const income = transactions.filter(t => t.type === 'Income').reduce((acc, t) => acc + t.amount, 0);
-        const expenses = transactions.filter(t => t.type === 'Expense').reduce((acc, t) => acc + t.amount, 0);
-        const invoicesDue = transactions.filter(t => t.type === 'Invoice' && t.status === 'Pending').reduce((acc, t) => acc + t.amount, 0);
-        
+        const income = transactions.filter(t => t.type.toLowerCase() === 'income' && t.status.toLowerCase() === 'recieved').reduce((acc, t) => acc + (t.amount || 0), 0);
+        const expenses = transactions.filter(t => t.type.toLowerCase() === 'expense').reduce((acc, t) => acc + (t.amount || 0), 0);
+        const amountDue = transactions.filter(t => t.type.toLowerCase() === 'income' && t.status.toLowerCase() === 'pending').reduce((acc, t) => acc + (t.amount || 0), 0);
+
         setTotalIncome(income);
         setTotalExpenses(expenses);
-        setAmountDue(invoicesDue);
+        setAmountDue(amountDue);
         setNetCashFlow(income - expenses);
-    }, []);
+    }, [transactions]);  // Added transactions dependency
 
     const handleTabClick = (tab) => {
         setTransactionsView(tab);
@@ -47,11 +50,18 @@ export default function CashFlow() {
     const handleSubmit = (transactionData) => {
         if (editingTransaction) {
             editTransaction(transactionData);
+            // editInvoiceQuotation(transactionData);
         } else {
             addTransaction(transactionData);
+            // addInvoiceQuotation(transactionData);
         }
         setModalIsOpen(false);
-        setEditingTransaction(null);
+        setEditingTransaction(null);  // Reset editingTransaction
+    };
+
+    const handleCloseModal = () => {
+        setModalIsOpen(false);
+        setEditingTransaction(null);  // Reset when closing modal
     };
 
     const metrics = [
@@ -74,13 +84,9 @@ export default function CashFlow() {
             case 'all':
                 return <AllTransactions transactions={transactions} onEdit={handleEditClick} />;
             case 'income':
-                return <IncomeTransactions transactions={transactions.filter((t) => t.type === 'Income')} onEdit={handleEditClick} />;
+                return <IncomeTransactions transactions={transactions.filter((t) => t.type.toLowerCase() === 'income')} onEdit={handleEditClick} />;
             case 'expense':
-                return <ExpenseTransactions transactions={transactions.filter((t) => t.type === 'Expense')} onEdit={handleEditClick} />;
-            case 'invoice':
-                return <AllTransactions transactions={transactions.filter((t) => t.type === 'Invoice')} onEdit={handleEditClick} />;
-            case 'quotation':
-                return <AllTransactions transactions={transactions.filter((t) => t.type === 'Quotation')} onEdit={handleEditClick} />;
+                return <ExpenseTransactions transactions={transactions.filter((t) => t.type.toLowerCase() === 'expense')} onEdit={handleEditClick} />;
             default:
                 return <AllTransactions transactions={transactions} onEdit={handleEditClick} />;
         }
@@ -114,12 +120,6 @@ export default function CashFlow() {
                         >
                             Expense
                         </button>
-                        <button className={`tab-button ${transactionsView === 'invoice' ? 'active' : ''}`} onClick={() => handleTabClick('invoice')}>
-                            Invoices
-                        </button>
-                        <button className={`tab-button ${transactionsView === 'quotation' ? 'active' : ''}`} onClick={() => handleTabClick('quotation')}>
-                            Quotations
-                        </button>
                     </div>
 
                     <div className="btn-add-transaction-container">
@@ -130,10 +130,11 @@ export default function CashFlow() {
 
                     <TransactionFormModal
                         isOpen={modalIsOpen}
-                        onClose={() => setModalIsOpen(false)}
+                        onClose={handleCloseModal}
                         onSubmit={handleSubmit}
                         initialData={editingTransaction}
                     />
+                    
                 </div>
                 <div className="tab-content">
                     {renderContent()}

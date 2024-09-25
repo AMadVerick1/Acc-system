@@ -9,14 +9,6 @@ const getAllInvoiceQuotations = async () => {
     }
 };
 
-const getInvoiceQuotationById = async (id) => {
-    try {
-        return await InvoiceQuotation.findById(id);
-    } catch (error) {
-        console.error('Error fetching invoice/quotation:', error);
-        throw error;
-    }
-};
 
 const createInvoiceQuotation = async (invoiceQuotationData) => {
     try {
@@ -49,7 +41,6 @@ const deleteInvoiceQuotation = async (id) => {
 
 module.exports = {
     getAllInvoiceQuotations,
-    getInvoiceQuotationById,
     createInvoiceQuotation,
     updateInvoiceQuotation,
     deleteInvoiceQuotation

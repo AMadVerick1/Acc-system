@@ -4,7 +4,7 @@ import InvoiceQuotationForm from '../forms/invoiceQuotationForm.jsx';
 import TransactionForm from '../forms/TransactionsForm.jsx';
 
 export default function TransactionFormModal({ isOpen, onClose, onSubmit, initialData }) {
-    const [formType, setFormType] = useState('Transaction'); // Add form type state
+    const [formType, setFormType] = useState('Invoice'); // Set default to 'Invoice'
 
     return (
         <Modal
@@ -13,7 +13,7 @@ export default function TransactionFormModal({ isOpen, onClose, onSubmit, initia
             contentLabel="Transaction Form"
             className="transaction-modal"
         >
-            <h2>{initialData ? 'Edit Transaction' : 'Add New Transaction'}</h2>
+            <h2>{initialData ? 'Generate Invoice' : 'Add New Transaction'}</h2>
 
             {/* Form type selection buttons */}
             <div className="form-type-selector">
@@ -29,12 +29,6 @@ export default function TransactionFormModal({ isOpen, onClose, onSubmit, initia
                 >
                     Invoice
                 </button>
-                <button
-                    className={`tab-button ${formType === 'Quotation' ? 'active' : ''}`}
-                    onClick={() => setFormType('Quotation')}
-                >
-                    Quotation
-                </button>
             </div>
 
             {/* Conditionally render the TransactionForm or InvoiceQuotationForm based on selected type */}
@@ -49,7 +43,7 @@ export default function TransactionFormModal({ isOpen, onClose, onSubmit, initia
             ) : (
                 <InvoiceQuotationForm
                     transactionId={initialData?.id}
-                    type={formType} // Pass formType as 'Invoice' or 'Quotation'
+                    type={formType} // Pass formType as 'Invoice'
                     onSubmit={(formData) => {
                         onSubmit(formData);
                         onClose(); // Close the modal after submitting

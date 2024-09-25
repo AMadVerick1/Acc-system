@@ -38,6 +38,24 @@
 .company-info, .bill-to {
   margin-top: 10px;
 }
+/* 
+const handleCreateAccount = (accountData) => {
+    setShowAccountForm(false);
+    fetchAccounts();
+};
+
+const [showAccountForm, setShowAccountForm] = useState(false);
+if (showAccountForm) {
+  return (
+      <div className="account-form-container">
+          <h2>Create a New Account</h2>
+          <AccountForm onSubmit={handleCreateAccount} />
+          <button onClick={() => setShowAccountForm(false)} className="btn-back">
+              Back to Transaction Form
+          </button>
+      </div>
+  );
+} */
 
 .item-list {
   width: 100%;

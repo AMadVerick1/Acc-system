@@ -4,15 +4,19 @@ import { TransactionContextProvider } from './transactionContext';
 import { BudgetContextProvider } from './budgetContext';
 import { AccountContextProvider } from './accountContext';
 import { ReportContextProvider } from './reportContext';
+import { InvoiceQuotationContextProvider } from './invoiceQuotationContext';
 
 const DataContextProvider = ({ children }) => (
   <TransactionContextProvider>
     <BudgetContextProvider>
       <AccountContextProvider>
-        {children}
+        <InvoiceQuotationContextProvider>
+          {children}
+        </InvoiceQuotationContextProvider>
       </AccountContextProvider>
     </BudgetContextProvider>
   </TransactionContextProvider>
+  
 );
 
 const GlobalStateProvider = ({ children }) => {

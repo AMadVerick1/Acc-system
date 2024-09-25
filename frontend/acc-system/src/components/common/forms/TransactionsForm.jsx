@@ -3,58 +3,70 @@ import { useAccounts } from '../../../context/accountContext';
 import AccountForm from './accountsForm';
 import './tr_style.css';
 
-export default function TransactionForm({ onSubmit, initialData }) {
-    const { accounts, fetchAccounts } = useAccounts();
+export default function TransactionForm({ onSubmit, initialData, invoiceQuotation }) {
+    const { accounts, fetchAccounts, updateAccountByID } = useAccounts();
     const [formType, setFormType] = useState('Transaction');
     const [invoiceItems, setInvoiceItems] = useState([{ description: '', quantity: 1, price: 0 }]);
 
-    const handleFormTypeChange = (e) => setFormType(e.target.value);
+    useEffect(() => {
+        console.log("Fetching accounts...");
+        fetchAccounts();
+    }, []);
 
     const [formData, setFormData] = useState({
-        account: initialData?.account || '',
-        date: initialData?.date || '',
-        description: initialData?.description || '',
-        source: initialData?.source || '',
-        amount: initialData?.amount || '',
+        account: initialData?.account || invoiceQuotation?.account || '',
+        date: new Date(),
+        description: initialData?.description || invoiceQuotation?.description || '',
+        source: initialData?.source || invoiceQuotation?.customerName || '',
+        amount: initialData?.amount || invoiceQuotation?.total || '',
         type: initialData?.type || 'Income',
         status: initialData?.status || 'Pending',
     });
 
-    const [showAccountForm, setShowAccountForm] = useState(false);
-
-    useEffect(() => {
-        fetchAccounts();
-    }, []);
-
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log(`Updating field: ${name} to value: ${value}`);
         setFormData({ ...formData, [name]: value });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        console.log("Submitting form data:", formData);
+
+        // Calculate new balance based on transaction type
+        const selectedAccount = accounts.find(account => account._id === formData.account);
+        const currentBalance = selectedAccount ? selectedAccount.balance : 0;
+        let newBalance;
+    
+        if (formData.type === 'Income') {
+            newBalance = currentBalance + Number(formData.amount); // Add to balance
+            console.log(`Calculating new balance for Income. Current balance: ${currentBalance}, Amount: ${formData.amount}, New balance: ${newBalance}`);
+        } else {
+            newBalance = currentBalance - Number(formData.amount); // Subtract from balance
+            console.log(`Calculating new balance for Expense. Current balance: ${currentBalance}, Amount: ${formData.amount}, New balance: ${newBalance}`);
+        }
+    
+        // Update the account balance
+        console.log(`Updating account ID: ${formData.account} with new balance: ${newBalance}`);
+        updateAccountByID(formData.account, { balance: newBalance }, formData.type); // Pass transactionType
+    
         if (formType === 'Invoice' || formType === 'Quotation') {
             const totalAmount = invoiceItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
+            console.log(`Submitting invoice data with total amount: ${totalAmount}`);
             onSubmit({ ...formData, amount: totalAmount, items: invoiceItems });
         } else {
+            console.log("Submitting transaction data:", formData);
             onSubmit(formData);
         }
     };
 
     const handleCreateAccount = (accountData) => {
+        console.log("Creating new account:", accountData);
         setShowAccountForm(false);
         fetchAccounts();
     };
 
-    const handleInvoiceItemChange = (index, field, value) => {
-        const updatedItems = [...invoiceItems];
-        updatedItems[index][field] = value;
-        setInvoiceItems(updatedItems);
-    };
-
-    const addInvoiceItem = () => {
-        setInvoiceItems([...invoiceItems, { description: '', quantity: 1, price: 0 }]);
-    };
+    const [showAccountForm, setShowAccountForm] = useState(false);
 
     if (showAccountForm) {
         return (
@@ -70,16 +82,10 @@ export default function TransactionForm({ onSubmit, initialData }) {
 
     return (
         <form onSubmit={handleSubmit} className="transaction-form">
-                {/* <div className="form-group">
-                    <label htmlFor="formType">Form Type:</label>
-                    <select id="formType" value={formType} onChange={handleFormTypeChange}>
-                        <option value="Transaction">Transaction</option>
-                        <option value="Invoice">Invoice</option>
-                        <option value="Quotation">Quotation</option>
-                    </select>
-                </div> */}
-
             <div className="form-group">
+                <button type="button" onClick={() => setShowAccountForm(true)} className="btn-create-account">
+                    + Create New Account
+                </button>
                 <label htmlFor="account">Account:</label>
                 <select
                     id="account"
@@ -95,9 +101,6 @@ export default function TransactionForm({ onSubmit, initialData }) {
                         </option>
                     ))}
                 </select>
-                <button type="button" onClick={() => setShowAccountForm(true)} className="btn-create-account">
-                    + Create New Account
-                </button>
             </div>
 
             <div className="form-group">
@@ -108,7 +111,6 @@ export default function TransactionForm({ onSubmit, initialData }) {
                     name="date"
                     value={formData.date}
                     onChange={handleChange}
-                    required
                 />
             </div>
 
@@ -124,78 +126,42 @@ export default function TransactionForm({ onSubmit, initialData }) {
                 />
             </div>
 
-            {formType === 'Transaction' ? (
-                <>
-                    <div className="form-group">
-                        <label htmlFor="source">Source:</label>
-                        <input
-                            type="text"
-                            id="source"
-                            name="source"
-                            value={formData.source}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
+            <div className="form-group">
+                <label htmlFor="source">Source:</label>
+                <input
+                    type="text"
+                    id="source"
+                    name="source"
+                    value={formData.source}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
 
-                    <div className="form-group">
-                        <label htmlFor="amount">Amount:</label>
-                        <input
-                            type="number"
-                            id="amount"
-                            name="amount"
-                            value={formData.amount}
-                            onChange={handleChange}
-                            required
-                        />
-                    </div>
+            <div className="form-group">
+                <label htmlFor="amount">Amount:</label>
+                <input
+                    type="number"
+                    id="amount"
+                    name="amount"
+                    value={formData.amount}
+                    onChange={handleChange}
+                    required
+                />
+            </div>
 
-                    <div className="form-group">
-                        <label htmlFor="type">Transaction Type:</label>
-                        <select
-                            id="type"
-                            name="type"
-                            value={formData.type}
-                            onChange={handleChange}
-                        >
-                            <option value="Income">Income</option>
-                            <option value="Expense">Expense</option>
-                        </select>
-                    </div>
-                </>
-            ) : (
-                <>
-                    <h3>{formType} Details</h3>
-                    {invoiceItems.map((item, index) => (
-                        <div key={index} className="invoice-item">
-                            <input
-                                type="text"
-                                placeholder="Description"
-                                value={item.description}
-                                onChange={(e) => handleInvoiceItemChange(index, 'description', e.target.value)}
-                            />
-                            <input
-                                type="number"
-                                placeholder="Quantity"
-                                value={item.quantity}
-                                onChange={(e) => handleInvoiceItemChange(index, 'quantity', e.target.value)}
-                            />
-                            <input
-                                type="number"
-                                placeholder="Price"
-                                value={item.price}
-                                onChange={(e) => handleInvoiceItemChange(index, 'price', e.target.value)}
-                            />
-                        </div>
-                    ))}
-                    <button type="button" onClick={addInvoiceItem}>
-                        + Add Item
-                    </button>
-                    <p>
-                        Total Amount: {invoiceItems.reduce((sum, item) => sum + item.quantity * item.price, 0)}
-                    </p>
-                </>
-            )}
+            <div className="form-group">
+                <label htmlFor="type">Transaction Type:</label>
+                <select
+                    id="type"
+                    name="type"
+                    value={formData.type}
+                    onChange={handleChange}
+                >
+                    <option value="Income">Income</option>
+                    <option value="Expense">Expense</option>
+                </select>
+            </div>
 
             <div className="form-group">
                 <label htmlFor="status">Status:</label>
@@ -206,7 +172,6 @@ export default function TransactionForm({ onSubmit, initialData }) {
                     onChange={handleChange}
                 >
                     <option value="Pending">Pending</option>
-                    <option value="Completed">Completed</option>
                     <option value="Received">Received</option>
                     <option value="Paid">Paid</option>
                 </select>

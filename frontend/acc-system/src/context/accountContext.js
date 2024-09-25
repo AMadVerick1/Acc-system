@@ -37,13 +37,20 @@ export const AccountContextProvider = ({ children }) => {
     }
   };
 
-  const updateAccountById = async (id, updatedAccount) => {
+  const updateAccountById = async (id, updatedAccount, transactionType) => {
     try {
       const existingAccount = accounts.find((account) => account._id === id);
       if (!existingAccount) {
         throw new Error('Account not found');
       }
-      const updatedData = await updateAccount(id, updatedAccount); // Use service function
+      const amount = parseFloat(updatedAccount.amount); // Get the amount from the transaction
+      let newBalance = existingAccount.balance; // Get current balance
+
+      // Adjust balance based on transaction type
+      newBalance += (transactionType === 'Income') ? amount : -amount;
+
+      // Create updated data with the new balance
+      const updatedData = await updateAccount(id, { balance: newBalance }); // Update balance
       setAccounts((prevAccounts) =>
         prevAccounts.map((account) => (account._id === id ? updatedData : account))
       );

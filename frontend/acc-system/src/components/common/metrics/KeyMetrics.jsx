@@ -1,36 +1,35 @@
 import React, { useEffect, useState } from 'react';
-import { calculateTotalBalance, calculateBudgetEfficiency, calculateIncomeVsExpenses } from '../../../services/kpiService';
+import { useTotalBalance, useBudgetEfficiency, useIncomeVsExpenses, useNetWorth, useSavingsRate } from '../../../services/kpiService';
 
-const KeyMetrics = () => {
-  const [totalBalance, setTotalBalance] = useState(0);
-  const [budgetEfficiency, setBudgetEfficiency] = useState(0);
-  const [incomeVsExpenses, setIncomeVsExpenses] = useState({ income: 0, expenses: 0, net: 0 });
+const KPIMetrics = ({ budgetId }) => {
+  // Using the custom hooks from kpiService
+  const { totalBalance, loading: balanceLoading, error: balanceError } = useTotalBalance();
+  // const { efficiency, loading: efficiencyLoading, error: efficiencyError } = useBudgetEfficiency(budgetId);
+  const { incomeVsExpenses, loading: incomeLoading, error: incomeError } = useIncomeVsExpenses();
+  const { netWorth, loading: netWorthLoading, error: netWorthError } = useNetWorth();
+  const { savingsRate, error: savingsError } = useSavingsRate();
 
-  useEffect(() => {
-    async function fetchKPIs() {
-      const balance = await calculateTotalBalance();
-      setTotalBalance(balance);
+  // Handle loading state for all KPIs
+  if (balanceLoading || incomeLoading || netWorthLoading) {
+    return <p>Loading KPI metrics...</p>;
+  }
 
-      const efficiency = await calculateBudgetEfficiency(/* pass relevant budgetId */);
-      setBudgetEfficiency(efficiency);
-
-      const cashFlow = await calculateIncomeVsExpenses();
-      setIncomeVsExpenses(cashFlow);
-    }
-
-    fetchKPIs();
-  }, []);
+  // Handle error state for any KPI calculation
+  if (balanceError || incomeError || netWorthError || savingsError) {
+    return <p>Error loading KPI metrics: {balanceError?.message || incomeError?.message || netWorthError?.message || savingsError?.message}</p>;
+  }
 
   return (
     <div>
-      <h2>KPI Overview</h2>
-      <div>Total Balance: ${totalBalance}</div>
-      <div>Budget Efficiency: {budgetEfficiency.toFixed(2)}%</div>
-      <div>Income: ${incomeVsExpenses.income}</div>
-      <div>Expenses: ${incomeVsExpenses.expenses}</div>
-      <div>Net Income: ${incomeVsExpenses.net}</div>
+      <p>Total Balance: {totalBalance}</p>
+      {/* <p>Budget Efficiency: {efficiency}%</p> */}
+      <p>Income: {incomeVsExpenses.income}</p>
+      <p>Expenses: {incomeVsExpenses.expenses}</p>
+      <p>Net: {incomeVsExpenses.net}</p>
+      <p>Net Worth: {netWorth}</p>
+      <p>Savings Rate: {savingsRate}%</p>
     </div>
   );
 };
 
-export default KeyMetrics;
+export default KPIMetrics;

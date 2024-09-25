@@ -1,6 +1,6 @@
 .cards-container{
   display: grid;
-  column-gap: 50px;
+  column-gap: 10px;
   grid-template-columns: auto auto;
 }
 

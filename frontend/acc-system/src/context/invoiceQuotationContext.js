@@ -1,6 +1,5 @@
 import React, { createContext, useState, useContext } from 'react';
 import { createInvoiceQuotation, getAllInvoiceQuotations, updateInvoiceQuotation, deleteInvoiceQuotation } from '../services/invoiceQuotationService';
-// import { getAllAccounts } from '../services/accountService';
 
 const InvoiceQuotationContext = createContext();
 
@@ -8,9 +7,6 @@ export const InvoiceQuotationContextProvider = ({ children }) => {
     const [invoiceQuotations, setInvoiceQuotations] = useState([]);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
-    // const [accounts, setAccounts] = useState([]);
-    const [editingInvoiceQuotation, setEditingInvoiceQuotation] = useState(null);
-    const [modalIsOpen, setModalIsOpen] = useState(false);
 
     const fetchAllInvoiceQuotations = async () => {
         setLoading(true);
@@ -67,11 +63,7 @@ export const InvoiceQuotationContextProvider = ({ children }) => {
             editInvoiceQuotation,
             removeInvoiceQuotation,
             loading,
-            error,
-            editingInvoiceQuotation,
-            setEditingInvoiceQuotation,
-            modalIsOpen,
-            setModalIsOpen
+            error
         }}>
             {children}
         </InvoiceQuotationContext.Provider>

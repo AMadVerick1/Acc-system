@@ -3,8 +3,8 @@ import '../styles.css';
 import React, { useState } from 'react';
 import BudgetOverview from './BudgetOverview';
 import Insights from '../../../components/common/metrics/Insights';
-import KeyMetrics from '../../../components/common/metrics/KeyMetrics';
 import HealthIndicators from '../../../components/common/metrics/FinancialHealthIndicators';
+import KeyMetrics from '../../../components/common/metrics/KeyMetrics';
 import IncomeExpenseChart from '../../../components/common/charts/IncomeExpenseChart';
 import ExportOptions from '../../../components/common/export/ExportOptions';
 
@@ -18,8 +18,8 @@ export default function FinancialOverview() {
             case 'financial':
                 return (
                     <div className="financial-overview-content">
-                        {/* <KeyMetrics /> */}
                         <IncomeExpenseChart />
+                        <KeyMetrics />
                         <HealthIndicators />
                         <Insights />
                         <ExportOptions />

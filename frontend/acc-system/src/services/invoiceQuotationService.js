@@ -2,27 +2,6 @@ import axios from 'axios';
 
 const API_BASE_URL = 'http://localhost:5000';
 
-export const createInvoiceQuotation = async (invoiceQuotationData) => {
-    try {
-        const response = await axios.post(`${API_BASE_URL}/invoice-quotation/create`, invoiceQuotationData);
-        return response.data;
-    } catch (error) {
-        console.error('Error creating invoice/quotation:', error);
-        throw error.response ? error.response.data : error.message;
-    }
-};
-
-
-export const getInvoiceQuotationById = async (id) => {
-    try {
-        const response = await axios.get(`${API_BASE_URL}/invoice-quotation/get/${id}`);
-        return response.data;
-    } catch (error) {
-        console.error('Error fetching invoice/quotation:', error);
-        throw error.response ? error.response.data : error.message;
-    }
-};
-
 export const getAllInvoiceQuotations = async () => {
     try {
         const response = await axios.get(`${API_BASE_URL}/invoice-quotation/getAll`);
@@ -33,13 +12,12 @@ export const getAllInvoiceQuotations = async () => {
     }
 };
 
-
-export const getInvoicesQuotations = async (type) => {
+export const createInvoiceQuotation = async (invoiceQuotationData) => {
     try {
-        const response = await axios.get(`${API_BASE_URL}/invoice-quotation/get/type/${type}`);
+        const response = await axios.post(`${API_BASE_URL}/invoice-quotation/create`, invoiceQuotationData);
         return response.data;
     } catch (error) {
-        console.error('Error fetching invoices/quotations:', error);
+        console.error('Error creating invoice/quotation:', error);
         throw error.response ? error.response.data : error.message;
     }
 };
