@@ -29,12 +29,21 @@ const createTransaction = async (req, res) => {
 
 const updateTransaction = async (req, res) => {
   try {
-    const updatedTransaction = await transactionService.updateTransaction(req.params.id, req.body); // Include ID and body
+    if (!req.body) {
+      throw new Error("Request body is empty or undefined");
+    }
+
+    console.log("Received update request with data:", req.body);  // Debug log
+
+    const updatedTransaction = await transactionService.updateTransaction(req.params.id, req.body);
     res.status(200).json(updatedTransaction);
   } catch (error) {
+    console.error("Failed to update transaction:", error.message);
     res.status(500).json({ message: error.message });
   }
 };
+
+
 
 const deleteTransaction = async (req, res) => {
   try {

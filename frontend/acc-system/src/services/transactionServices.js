@@ -37,14 +37,22 @@ export const createTransaction = async (transactionData) => {
 
 // Update an Existing Transaction
 export const updateTransaction = async (id, updateData) => {
-  try {
-      const response = await axios.put(`${API_BASE_URL}/transactions/update-transaction/${id}`, updateData);
-      return response.data;
-  } catch (error) {
-      console.error(`Error updating transaction with ID ${id}:`, error.response?.data?.message || error.message);
-      throw error;
-  }
+    try {
+        if (!updateData) {
+            throw new Error('Update data is undefined');
+        }
+  
+        console.log("Sending update request with data:", updateData);  // Debug log
+  
+        const response = await axios.put(`${API_BASE_URL}/transactions/update-transaction/${id}`, updateData);
+        return response.data;
+    } catch (error) {
+        console.error(`Error updating transaction with ID ${id}:`, error.response?.data?.message || error.message);
+        throw error;
+    }
 };
+  
+  
 
 // Delete a Transaction
 export const deleteTransaction = async (id) => {

@@ -41,9 +41,15 @@ const createTransaction = async (transactionData) => {
 // Update a transaction by ID
 const updateTransaction = async (id, updatedData) => {
   try {
+    if (!updatedData || typeof updatedData !== 'object') {
+      throw new Error('No valid update data provided');
+    }
+
+    console.log('Updating transaction in database with data:', updatedData);  // Debug log
+
     const transaction = await Transactions.findByIdAndUpdate(id, updatedData, {
       new: true,
-      runValidators: true, // Ensures data consistency
+      runValidators: true, // Ensures validation
     });
 
     if (!transaction) {

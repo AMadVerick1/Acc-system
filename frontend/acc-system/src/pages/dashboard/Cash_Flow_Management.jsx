@@ -3,16 +3,13 @@ import AllTransactions from '../../components/common/transactions_list/AllTransa
 import IncomeTransactions from '../../components/common/transactions_list/IncomeTransactions.jsx';
 import ExpenseTransactions from '../../components/common/transactions_list/ExpenseTransactions.jsx';
 import TransactionFormModal from '../../components/common/modals/TransactionsModal.jsx';
-// import { useInvoiceQuotationContext } from '../../context/invoiceQuotationContext.js';
 import { useTransactions } from '../../context/transactionContext';
 import { useAccounts } from '../../context/accountContext';
-
-import Cards from '../../components/common/card/cards'; // Import the Cards component
+import Cards from '../../components/common/card/cards'; 
 
 export default function CashFlow() {
     const { transactions, fetchAllTransactions, addTransaction, editTransaction, error, loading } = useTransactions();
-    // const { invoiceQuotation, fetchAllInvoiceQuotations, addInvoiceQuotation, editInvoiceQuotation } = useInvoiceQuotationContext();
-    const { accounts, fetchAccounts } = useAccounts();
+    const { fetchAccounts } = useAccounts();
     const [modalIsOpen, setModalIsOpen] = useState(false);
     const [editingTransaction, setEditingTransaction] = useState(null);
     const [transactionsView, setTransactionsView] = useState('all');
@@ -22,46 +19,56 @@ export default function CashFlow() {
     const [amountDue, setAmountDue] = useState(0);
 
     useEffect(() => {
+        console.log('Fetching all transactions...');
         fetchAllTransactions();
-        // fetchAllInvoiceQuotations();
         fetchAccounts();
     }, []);
 
     useEffect(() => {
-        const income = transactions.filter(t => t.type.toLowerCase() === 'income' && t.status.toLowerCase() === 'recieved').reduce((acc, t) => acc + (t.amount || 0), 0);
-        const expenses = transactions.filter(t => t.type.toLowerCase() === 'expense').reduce((acc, t) => acc + (t.amount || 0), 0);
-        const amountDue = transactions.filter(t => t.type.toLowerCase() === 'income' && t.status.toLowerCase() === 'pending').reduce((acc, t) => acc + (t.amount || 0), 0);
+        console.log('Transactions fetched:', transactions);
+
+        const income = transactions.filter(t => t.type === 'Income' && t.status === 'Received').reduce((acc, t) => acc + (t.amount || 0), 0);
+
+        const expenses = transactions.filter(t => t.type === 'Expense').reduce((acc, t) => acc + (t.amount || 0), 0);
+
+        const amountDue = transactions.filter(t => t.type === 'Income' && t.status === 'Pending').reduce((acc, t) => acc + (t.amount || 0), 0);
+
+        console.log('Income:', income);
+        console.log('Expenses:', expenses);
+        console.log('Amount Due:', amountDue);
 
         setTotalIncome(income);
         setTotalExpenses(expenses);
         setAmountDue(amountDue);
         setNetCashFlow(income - expenses);
-    }, [transactions]);  // Added transactions dependency
+    }, [transactions]); // Added transactions dependency
 
     const handleTabClick = (tab) => {
+        console.log(`Switching to ${tab} view`);
         setTransactionsView(tab);
     };
 
     const handleEditClick = (transaction) => {
+        console.log('Editing transaction:', transaction);
         setEditingTransaction(transaction);
         setModalIsOpen(true);
     };
 
     const handleSubmit = (transactionData) => {
+        console.log('Submitting transaction from CashFlow:', transactionData);
         if (editingTransaction) {
-            editTransaction(transactionData);
-            // editInvoiceQuotation(transactionData);
+            editTransaction(editingTransaction._id, transactionData);  // Ensure you pass the correct ID for editing
         } else {
             addTransaction(transactionData);
-            // addInvoiceQuotation(transactionData);
         }
         setModalIsOpen(false);
-        setEditingTransaction(null);  // Reset editingTransaction
+        setEditingTransaction(null);
     };
 
     const handleCloseModal = () => {
+        console.log('Closing modal');
         setModalIsOpen(false);
-        setEditingTransaction(null);  // Reset when closing modal
+        setEditingTransaction(null);
     };
 
     const metrics = [
@@ -73,21 +80,27 @@ export default function CashFlow() {
 
     const renderContent = () => {
         if (loading) {
+            console.log('Loading transactions...');
             return <p>Loading transactions...</p>;
         }
 
         if (error) {
+            console.error('Error fetching transactions:', error);
             return <p>Error: {error}</p>;
         }
 
         switch (transactionsView) {
             case 'all':
+                console.log('Displaying all transactions');
                 return <AllTransactions transactions={transactions} onEdit={handleEditClick} />;
             case 'income':
+                console.log('Displaying income transactions');
                 return <IncomeTransactions transactions={transactions.filter((t) => t.type.toLowerCase() === 'income')} onEdit={handleEditClick} />;
             case 'expense':
+                console.log('Displaying expense transactions');
                 return <ExpenseTransactions transactions={transactions.filter((t) => t.type.toLowerCase() === 'expense')} onEdit={handleEditClick} />;
             default:
+                console.log('Defaulting to all transactions view');
                 return <AllTransactions transactions={transactions} onEdit={handleEditClick} />;
         }
     };

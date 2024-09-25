@@ -25,7 +25,14 @@ const createAccount = async (accountData) => {
   return await newAccount.save();
 };
 
+// services/accountService.js
 const updateAccount = async (accountId, updateData) => {
+  if (!updateData || typeof updateData !== 'object') {
+    throw new Error('Invalid update data');
+  }
+
+  console.log('Updating account in database with data:', updateData); // Debugging log
+
   const account = await Account.findByIdAndUpdate(accountId, updateData, {
     new: true,
     runValidators: true,

@@ -40,11 +40,12 @@ export const TransactionContextProvider = ({ children }) => {
           console.error('Failed to add transaction:', error);
           setError('Failed to add transaction. Please try again.');
       }
-  };
+    };
 
-    const editTransaction = async (id, updateData) => {
+    const editTransaction = async (id, transactionData) => {
         try {
-            const updatedTransaction = await updateTransaction(id, updateData);
+            console.log("Updating transaction with data:", transactionData);  // Debug log
+            const updatedTransaction = await updateTransaction(id, transactionData);
             setTransactions((prev) =>
                 prev.map((transaction) => (transaction._id === id ? updatedTransaction : transaction))
             );
@@ -53,6 +54,8 @@ export const TransactionContextProvider = ({ children }) => {
             setError('Failed to update transaction. Please try again.');
         }
     };
+
+
 
     const removeTransaction = async (id) => {
         try {

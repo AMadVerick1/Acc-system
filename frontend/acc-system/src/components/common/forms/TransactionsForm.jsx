@@ -4,7 +4,7 @@ import AccountForm from './accountsForm';
 import './tr_style.css';
 
 export default function TransactionForm({ onSubmit, initialData, invoiceQuotation }) {
-    const { accounts, fetchAccounts, updateAccountByID } = useAccounts();
+    const { accounts, fetchAccounts, updateAccountById } = useAccounts();
     const [formType, setFormType] = useState('Transaction');
     const [invoiceItems, setInvoiceItems] = useState([{ description: '', quantity: 1, price: 0 }]);
 
@@ -36,7 +36,7 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
         // Calculate new balance based on transaction type
         const selectedAccount = accounts.find(account => account._id === formData.account);
         const currentBalance = selectedAccount ? selectedAccount.balance : 0;
-        let newBalance;
+        let  newBalance;
     
         if (formData.type === 'Income') {
             newBalance = currentBalance + Number(formData.amount); // Add to balance
@@ -48,7 +48,7 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
     
         // Update the account balance
         console.log(`Updating account ID: ${formData.account} with new balance: ${newBalance}`);
-        updateAccountByID(formData.account, { balance: newBalance }, formData.type); // Pass transactionType
+        updateAccountById(formData.account, { amount: formData.amount }, formData.type);
     
         if (formType === 'Invoice' || formType === 'Quotation') {
             const totalAmount = invoiceItems.reduce((sum, item) => sum + item.quantity * item.price, 0);

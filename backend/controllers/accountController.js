@@ -29,9 +29,17 @@ const createAccount = async (req, res) => {
 
 const updateAccount = async (req, res) => {
   try {
-    const updatedAccount = await accountService.updateAccount(req.params.id, req.body);
+    // Get account ID from URL params and update data from request body
+    const accountId = req.params.id;
+    const updateData = req.body;
+
+    // Call the service layer to update the account
+    const updatedAccount = await accountService.updateAccount(accountId, updateData);
+
+    // Send success response with the updated account
     res.status(200).json(updatedAccount);
   } catch (error) {
+    // Send error response if any error occurs
     res.status(400).json({ message: error.message });
   }
 };
