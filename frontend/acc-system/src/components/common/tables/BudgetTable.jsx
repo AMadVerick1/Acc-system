@@ -26,7 +26,7 @@ export default function BudgetItemsTable({ items, onEdit, onDelete }) {
             <th>Name</th>
             <th>Category</th>
             <th>Total Amount</th>
-            {/* <th>Allocated Amount</th> */}
+            <th>Allocated Amount</th>
             <th>Spent Amount</th>
             <th>Variance</th>
             <th>Action</th>
@@ -58,7 +58,7 @@ export default function BudgetItemsTable({ items, onEdit, onDelete }) {
                   </div>
                 </td>
                 <td>R{item.totalAmount || 0}</td>
-                {/* <td>R{item.allocatedAmount || 0}</td> */}
+                <td>R{item.allocatedAmount || 0}</td>
                 <td>R{totals.spentAmount}</td>
                 <td className={variance > 0 ? 'positive' : 'negative'}>
                   R{variance}

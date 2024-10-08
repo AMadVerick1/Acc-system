@@ -33,15 +33,18 @@ export const BudgetContextProvider = ({ children }) => {
   };
 
   const editBudgetItem = async (id, updateData) => {
+    console.log(`Editing budget item with ID: ${id} and data:`, updateData); // Debugging log
     try {
-      const updatedItem = await updateBudgetItem(id, updateData);
-      setBudgetItems((prev) =>
-        prev.map((item) => (item._id === id ? updatedItem : item)) // Use _id consistently
-      );
+        const updatedItem = await updateBudgetItem(id, updateData);
+        console.log('Updated budget item:', updatedItem); // Debugging log
+        setBudgetItems((prev) =>
+            prev.map((item) => (item._id === id ? updatedItem : item))
+        );
     } catch (error) {
-      console.error('Failed to update budget item:', error);
+        console.error('Failed to update budget item:', error);
     }
   };
+
 
   const removeBudgetItem = async (id) => {
     try {

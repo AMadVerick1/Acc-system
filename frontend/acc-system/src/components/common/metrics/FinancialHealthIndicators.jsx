@@ -19,7 +19,7 @@ export default function HealthIndicators() {
     const calculateTotalAssets = () => {
         let totalAssets = 0;
         accounts.forEach(account => {
-            if (account.category === 'asset') {
+            if (account.category === 'assets') {
                 totalAssets += account.balance || 0;
             }
         });
@@ -53,8 +53,8 @@ export default function HealthIndicators() {
 
     // Operating Cash Flow Calculation
     const calculateOperatingCashFlow = () => {
-        const incomeTransactions = transactions.filter(t => t.type === 'income') || [];
-        const expenseTransactions = transactions.filter(t => t.type === 'expense') || [];
+        const incomeTransactions = transactions.filter(t => t.type === 'Income') || [];
+        const expenseTransactions = transactions.filter(t => t.type === 'Expense') || [];
 
         const totalIncome = incomeTransactions.reduce((sum, transaction) => sum + (transaction.amount || 0), 0);
         const totalExpenses = expenseTransactions.reduce((sum, transaction) => sum + (transaction.amount || 0), 0);

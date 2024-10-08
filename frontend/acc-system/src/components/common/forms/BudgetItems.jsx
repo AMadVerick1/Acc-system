@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useBudget } from '../../../context/budgetContext';
 import { useAccounts } from '../../../context/accountContext';
 
-const AddBudgetForm = () => {
+const AddBudgetForm = ({ onSubmit }) => {
   const { addBudget } = useBudget();
   const { accounts, fetchAccounts } = useAccounts();
   
@@ -36,8 +36,17 @@ const AddBudgetForm = () => {
     const updatedCategories = categories.map((category, idx) => 
       idx === index ? { ...category, [field]: value } : category
     );
-    setCategories(updatedCategories);
-    console.log(`Category Updated (index: ${index}, field: ${field}, value: ${value})`);
+
+    // Calculate the total allocated amount after updating
+    const totalAllocated = updatedCategories.reduce((acc, category) => acc + (Number(category.allocatedAmount) || 0), 0);
+
+    // Check if the total allocated amount exceeds the total amount
+    if (totalAllocated <= totalAmount) {
+      setCategories(updatedCategories);
+      console.log(`Category Updated (index: ${index}, field: ${field}, value: ${value})`);
+    } else {
+      alert(`Allocated amount cannot exceed the total amount of ${totalAmount}.`);
+    }
   };
 
   // Add New Category   
@@ -60,7 +69,7 @@ const AddBudgetForm = () => {
       name: category.name,
       allocatedAmount: category.allocatedAmount,
       spentAmount: category.spentAmount,
-      progress: (category.spentAmount / category.allocatedAmount) * 100,
+      progress: (category.allocatedAmount > 0) ? ((category.spentAmount / category.allocatedAmount) * 100) : 0,
       alerts: {
         overspend: category.spentAmount > category.allocatedAmount,
         approachingLimit: (category.spentAmount / category.allocatedAmount) > 0.9

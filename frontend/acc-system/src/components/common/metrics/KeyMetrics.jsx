@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useTotalBalance, useBudgetEfficiency, useIncomeVsExpenses, useNetWorth, useSavingsRate } from '../../../services/kpiService';
+import { useTotalBalance, useIncomeVsExpenses, useNetWorth, useSavingsRate } from '../../../services/kpiService';
 
-const KPIMetrics = ({ budgetId }) => {
+const KPIMetrics = () => {
   // Using the custom hooks from kpiService
   const { totalBalance, loading: balanceLoading, error: balanceError } = useTotalBalance();
   // const { efficiency, loading: efficiencyLoading, error: efficiencyError } = useBudgetEfficiency(budgetId);

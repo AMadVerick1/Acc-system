@@ -1,18 +1,28 @@
 import React, { useState, useEffect } from 'react';
 import { useAccounts } from '../../../context/accountContext';
+import { useBudget } from '../../../context/budgetContext';
 import AccountForm from './accountsForm';
+import BudgetItemsForm from './BudgetItems';
 import './tr_style.css';
+// import { set } from 'mongoose';
 
 export default function TransactionForm({ onSubmit, initialData, invoiceQuotation }) {
     const { accounts, fetchAccounts, updateAccountById } = useAccounts();
+    const { budgetItems, fetchBudgetOverview, editBudgetItem } = useBudget([]);
     const [formType, setFormType] = useState('Transaction');
     const [invoiceItems, setInvoiceItems] = useState([{ description: '', quantity: 1, price: 0 }]);
+    const [selectedBudget, setSelectedBudget] = useState(''); // Selected budget ID
+    const [selectedCategory, setSelectedCategory] = useState(''); // Selected category within the budget
 
+    // Fetch accounts and budget overview on component mount
     useEffect(() => {
         console.log("Fetching accounts...");
         fetchAccounts();
+        console.log("Fetching budgets...");
+        fetchBudgetOverview(); // Fetch budgets
     }, []);
 
+    // Initialize form data state
     const [formData, setFormData] = useState({
         account: initialData?.account || invoiceQuotation?.account || '',
         date: new Date(),
@@ -21,14 +31,18 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
         amount: initialData?.amount || invoiceQuotation?.total || '',
         type: initialData?.type || 'Income',
         status: initialData?.status || 'Pending',
+        budget: initialData?.budget || '',
+        category: initialData?.category || '',
     });
 
+    // Handle form field changes
     const handleChange = (e) => {
         const { name, value } = e.target;
         console.log(`Updating field: ${name} to value: ${value}`);
         setFormData({ ...formData, [name]: value });
     };
 
+    // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log("Submitting form data:", formData);
@@ -36,8 +50,8 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
         // Calculate new balance based on transaction type
         const selectedAccount = accounts.find(account => account._id === formData.account);
         const currentBalance = selectedAccount ? selectedAccount.balance : 0;
-        let  newBalance;
-    
+        let newBalance;
+
         if (formData.type === 'Income') {
             newBalance = currentBalance + Number(formData.amount); // Add to balance
             console.log(`Calculating new balance for Income. Current balance: ${currentBalance}, Amount: ${formData.amount}, New balance: ${newBalance}`);
@@ -45,11 +59,36 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
             newBalance = currentBalance - Number(formData.amount); // Subtract from balance
             console.log(`Calculating new balance for Expense. Current balance: ${currentBalance}, Amount: ${formData.amount}, New balance: ${newBalance}`);
         }
-    
+
         // Update the account balance
         console.log(`Updating account ID: ${formData.account} with new balance: ${newBalance}`);
         updateAccountById(formData.account, { amount: formData.amount }, formData.type);
-    
+
+        // Update the selected budget category's spentAmount
+        const selectedBudgetItem = budgetItems.find(budget => budget._id === formData.budget);
+        if (selectedBudgetItem) {
+            const updatedCategories = selectedBudgetItem.categories.map(category => {
+                if (category.name === formData.category && formData.type === 'Expense') {
+                    console.log(`Updating category ${category.name} with spentAmount: ${category.spentAmount} + ${formData.amount}`);
+                    return {
+                        ...category,
+                        spentAmount: category.spentAmount + Number(formData.amount),
+                    };
+                } else if (category.name === formData.category && formData.type === 'Income') {
+                    console.log(`Reducing spentAmount for category ${category.name}: ${category.spentAmount} - ${formData.amount}`);
+                    return {
+                        ...category,
+                        spentAmount: category.spentAmount - Number(formData.amount),
+                    };
+                }
+                return category;
+            });
+
+            console.log("Updating budget category:", formData.category, "with new spentAmount", updatedCategories);
+            editBudgetItem(formData.budget, { categories: updatedCategories });
+        }
+
+        // Handle form submission for Invoice or Quotation
         if (formType === 'Invoice' || formType === 'Quotation') {
             const totalAmount = invoiceItems.reduce((sum, item) => sum + item.quantity * item.price, 0);
             console.log(`Submitting invoice data with total amount: ${totalAmount}`);
@@ -60,6 +99,7 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
         }
     };
 
+    // Handle account creation
     const handleCreateAccount = (accountData) => {
         console.log("Creating new account:", accountData);
         setShowAccountForm(false);
@@ -67,6 +107,27 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
     };
 
     const [showAccountForm, setShowAccountForm] = useState(false);
+    const [showBudgetForm, setShowBudgetForm] = useState(false);
+
+    // Handle the budget form
+    const handleCreateBudget = (budgetData) => {
+        console.log("Creating new budget item:", budgetData);
+        setShowBudgetForm(false);
+        fetchBudgetOverview();
+    };
+
+    // Render forms for account or budget creation
+    if (showBudgetForm) {
+        return (
+            <div className="account-form-container">
+                <h2>Create a New Budget Item</h2>
+                <BudgetItemsForm onSubmit={handleCreateBudget} />
+                <button onClick={() => setShowBudgetForm(false)} className="btn-back">
+                    Back to Transaction Form
+                </button>
+            </div>
+        );
+    }
 
     if (showAccountForm) {
         return (
@@ -102,6 +163,54 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
                     ))}
                 </select>
             </div>
+
+            <div className="form-group">
+                <button type="button" onClick={() => setShowBudgetForm(true)} className="btn-create-budget">
+                    + Create New Budget
+                </button>
+                <label htmlFor="budget">Budget:</label>
+                <select
+                    id="budget"
+                    name="budget"
+                    value={formData.budget}
+                    onChange={(e) => {
+                        handleChange(e);
+                        setSelectedBudget(e.target.value);
+                        setSelectedCategory(''); // Reset category selection when changing budget
+                    }}
+                    required
+                >
+                    <option value="">Select a Budget</option>
+                    {budgetItems.map((budgetItem) => (
+                        <option key={budgetItem._id} value={budgetItem._id}>
+                            {budgetItem.name} - {budgetItem.totalAmount}
+                        </option>
+                    ))}
+                </select>
+            </div>
+
+            {/* Select category within the chosen budget */}
+            {selectedBudget && (
+                <div className="form-group">
+                    <label htmlFor="category">Category:</label>
+                    <select
+                        id="category"
+                        name="category"
+                        value={formData.category}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="">Select a Category</option>
+                        {budgetItems
+                            .find(budget => budget._id === selectedBudget)?.categories
+                            .map((category) => (
+                                <option key={category.name} value={category.name}>
+                                    {category.name} - Allocated: {category.allocatedAmount}
+                                </option>
+                            ))}
+                    </select>
+                </div>
+            )}
 
             <div className="form-group">
                 <label htmlFor="date">Date:</label>

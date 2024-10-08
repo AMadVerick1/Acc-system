@@ -16,14 +16,18 @@ export default function Insights() {
     const [quickRatio, setQuickRatio] = useState(0);
     const [leverage, setLeverage] = useState(0);
 
+    console.log("Accounts:", accounts); // Debugging log for accounts
+    console.log("Transactions:", transactions); // Debugging log for transactions
+
     // Calculate Total Assets
     const calculateTotalAssets = () => {
         let totalAssets = 0;
         accounts.forEach(account => {
-            if (account.category === 'asset') {
+            if (account.category === 'assets') {
                 totalAssets += account.balance || 0;
             }
         });
+        console.log("Total Assets Calculated:", totalAssets); // Log total assets calculation
         return totalAssets;
     };
 
@@ -35,6 +39,7 @@ export default function Insights() {
                 totalLiabilities += account.balance || 0;
             }
         });
+        console.log("Total Liabilities Calculated:", totalLiabilities); // Log total liabilities calculation
         return totalLiabilities;
     };
 
@@ -46,6 +51,7 @@ export default function Insights() {
                 totalEquity += account.balance || 0;
             }
         });
+        console.log("Total Equity Calculated:", totalEquity); // Log total equity calculation
         return totalEquity;
     };
 
@@ -57,6 +63,10 @@ export default function Insights() {
         const totalIncome = incomeTransactions.reduce((sum, transaction) => sum + (transaction.amount || 0), 0);
         const totalExpenses = expenseTransactions.reduce((sum, transaction) => sum + (transaction.amount || 0), 0);
 
+        console.log("Total Income Calculated:", totalIncome); // Log total income calculation
+        console.log("Total Expenses Calculated:", totalExpenses); // Log total expenses calculation
+        console.log("Operating Cash Flow:", totalIncome - totalExpenses); // Log operating cash flow calculation
+
         return totalIncome - totalExpenses;
     };
 
@@ -64,21 +74,27 @@ export default function Insights() {
     const calculateDebtToEquity = () => {
         const totalLiabilities = calculateTotalLiabilities();
         const totalEquity = calculateTotalEquity();
-        return totalEquity !== 0 ? totalLiabilities / totalEquity : 0;
+        const ratio = totalEquity !== 0 ? totalLiabilities / totalEquity : 0;
+        console.log("Debt-to-Equity Ratio Calculated:", ratio); // Log debt-to-equity ratio calculation
+        return ratio;
     };
 
     // Current Ratio Calculation
     const calculateCurrentRatio = () => {
         const totalAssets = calculateTotalAssets();
         const totalLiabilities = calculateTotalLiabilities();
-        return totalLiabilities !== 0 ? totalAssets / totalLiabilities : 0;
+        const ratio = totalLiabilities !== 0 ? totalAssets / totalLiabilities : 0;
+        console.log("Current Ratio Calculated:", ratio); // Log current ratio calculation
+        return ratio;
     };
 
     // Working Capital Calculation
     const calculateWorkingCapital = () => {
         const totalAssets = calculateTotalAssets();
         const totalLiabilities = calculateTotalLiabilities();
-        return totalAssets - totalLiabilities;
+        const workingCapital = totalAssets - totalLiabilities;
+        console.log("Working Capital Calculated:", workingCapital); // Log working capital calculation
+        return workingCapital;
     };
 
     // Calculate all indicators on component mount using useEffect
@@ -89,6 +105,7 @@ export default function Insights() {
             const currentRatio = calculateCurrentRatio();
             const debtToEquity = calculateDebtToEquity();
 
+            console.log("Setting State for Calculated Indicators...");
             setOperatingCashflow(operatingCashflow);
             setWorkingCapital(workingCapital);
             setCurrentRatio(currentRatio);
@@ -97,10 +114,12 @@ export default function Insights() {
             const totalAssets = calculateTotalAssets();
             const totalLiabilities = calculateTotalLiabilities();
             const leverageRatio = totalAssets !== 0 ? totalLiabilities / totalAssets : 0;
+            console.log("Leverage Ratio Calculated:", leverageRatio); // Log leverage ratio calculation
             setLeverage(leverageRatio);
 
             const quickAssets = totalAssets; // Assuming no inventory
             const quickRatio = totalLiabilities !== 0 ? quickAssets / totalLiabilities : 0;
+            console.log("Quick Ratio Calculated:", quickRatio); // Log quick ratio calculation
             setQuickRatio(quickRatio);
         };
 
@@ -109,6 +128,7 @@ export default function Insights() {
 
     // Generate insights based on financial indicators
     useEffect(() => {
+        console.log("Generating Insights..."); // Log insight generation trigger
         const generatedInsights = generateInsights({
             operatingCashflow,
             workingCapital,
@@ -117,6 +137,7 @@ export default function Insights() {
             quickRatio,
             leverage,
         });
+        console.log("Generated Insights:", generatedInsights); // Log generated insights
         setInsights(generatedInsights);
     }, [operatingCashflow, workingCapital, currentRatio, debtToEquity, quickRatio, leverage]);
 

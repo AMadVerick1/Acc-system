@@ -29,8 +29,7 @@ function App() {
                             <Route path="/" element={<Home />} />
                             <Route path="/home" element={<Home />} />
                             <Route path="/cash-flow" element={<CashFlow />} />
-                            <Route path="/financial-overview" element={<FinancialOverview />} />
-                            {/* <Route path="/budgets" element={<BudgetOverview />} /> */}
+                            <Route path="/finances-&-budget" element={<FinancialOverview />} />
                             <Route path="/payroll" element={<Payroll />} />
                             <Route path="/reports" element={<Reports />} />
                         </Routes>

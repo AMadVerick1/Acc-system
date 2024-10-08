@@ -36,6 +36,7 @@ export default function TransactionFormModal({ isOpen, onClose, onSubmit, initia
                 <TransactionForm
                     initialData={initialData}
                     onSubmit={(formData) => {
+                        console.log('Submitting formData from TransactionFormModal:', formData);
                         onSubmit(formData);
                         onClose(); // Close the modal after submitting
                     }}

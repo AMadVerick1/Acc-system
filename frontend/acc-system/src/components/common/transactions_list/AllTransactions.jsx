@@ -6,11 +6,67 @@ import TransactionFormModal from '../modals/TransactionsModal'; // Import the mo
 import { PDFDownloadLink, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
 
 const styles = StyleSheet.create({
-    page: { padding: 30 },
-    section: { marginBottom: 10 },
-    tableHeader: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#000' },
-    tableRow: { flexDirection: 'row', marginBottom: 5 },
-    tableCell: { width: '25%' }
+    page: {
+        padding: 30,
+        fontSize: 10,
+        fontFamily: 'Helvetica',
+    },
+    section: {
+        marginBottom: 10,
+    },
+    companyHeader: {
+        fontWeight: 'bold',
+        fontSize: 14,
+        textAlign: 'center',
+        marginBottom: 10,
+    },
+    companySubHeader: {
+        fontSize: 10,
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    companyInfo: {
+        fontSize: 10,
+        marginBottom: 20,
+    },
+    billTo: {
+        marginTop: 20,
+        marginBottom: 20,
+        fontSize: 10,
+    },
+    tableHeader: {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#000',
+        paddingBottom: 5,
+        fontWeight: 'bold',
+    },
+    tableRow: {
+        flexDirection: 'row',
+        marginBottom: 5,
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#ccc',
+    },
+    tableCell: {
+        width: '25%',
+        fontSize: 10,
+    },
+    totalSection: {
+        marginTop: 20,
+        fontSize: 12,
+        fontWeight: 'bold',
+        textAlign: 'right',
+    },
+    bankDetails: {
+        marginTop: 20,
+        fontSize: 10,
+    },
+    footerLine: {
+        width: '100%',
+        borderTopWidth: 1,
+        borderTopColor: '#000',
+        marginVertical: 5,
+    },
 });
 
 const InvoiceDocument = ({ formData, type, transactionId }) => (

@@ -16,43 +16,54 @@ export default function BudgetOverview() {
     const [selectedBudget, setSelectedBudget] = useState(null); // Track the selected budget for the overview sections
 
     useEffect(() => {
+        console.log("Fetching budget overview...");
         fetchBudgetOverview();
     }, []);
 
     const addOrEditBudgetItem = async (item) => {
         if (isEditing && currentItem) {
+            console.log(`Editing budget item with ID: ${currentItem._id}`, item);
             await editBudgetItem(currentItem._id, item);
         } else {
+            console.log("Adding new budget item:", item);
             await addBudget(item);
         }
         resetModal();
     };
 
     const editBudgetItemHandler = (item) => {
+        console.log("Editing budget item:", item);
         setCurrentItem(item);
         setIsEditing(true);
         setIsModalOpen(true);
     };
 
     const handleDelete = async (id) => {
+        console.log(`Deleting budget item with ID: ${id}`);
         await removeBudgetItem(id);
     };
 
     const resetModal = () => {
+        console.log("Resetting modal state...");
         setIsEditing(false);
         setCurrentItem(null);
         setIsModalOpen(false);
     };
 
-    const [totalAllocated, setTotalAllocated] = useState(0);
     const [totalBudget, setTotalBudget] = useState(0);
+    const [totalAllocated, setTotalAllocated] = useState(0);
     const [remainingBudget, setRemainingBudget] = useState(0);
 
     useEffect(() => {
+        console.log("Budget items changed:", budgetItems);
         if (budgetItems.length > 0) {
             const totalBudget = budgetItems.reduce((acc, item) => acc + item.totalAmount, 0);
             const totalAllocated = budgetItems.reduce((acc, item) => acc + item.allocatedAmount, 0);
             const remainingBudget = totalBudget - totalAllocated;
+
+            console.log("Total Budget:", totalBudget);
+            console.log("Total Allocated:", totalAllocated);
+            console.log("Remaining Budget:", remainingBudget);
 
             setTotalBudget(totalBudget);
             setTotalAllocated(totalAllocated);
@@ -64,7 +75,10 @@ export default function BudgetOverview() {
         <div className="budget-overview">
             <div className="col-1">
                 {/* Budget List */}
-                <BudgetList budgets={budgetItems} onSelectBudget={setSelectedBudget} />
+                <BudgetList budgets={budgetItems} onSelectBudget={(budget) => {
+                    console.log("Selected budget:", budget);
+                    setSelectedBudget(budget);
+                }} />
             </div>
 
             <div className="col-2">
@@ -91,7 +105,10 @@ export default function BudgetOverview() {
                     <p>Remaining: {remainingBudget}</p>
                 </div>
 
-                <button className="btn-add" onClick={() => setIsModalOpen(true)}>
+                <button className="btn-add" onClick={() => {
+                    console.log("Opening modal to", isEditing ? "edit" : "add", "budget item.");
+                    setIsModalOpen(true);
+                }}>
                     + {isEditing ? 'Edit Budget Item' : 'Add Budget Item'}
                 </button>
 

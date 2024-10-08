@@ -1,37 +1,102 @@
 import React, { useState, useEffect } from 'react';
 import { PDFDownloadLink, Page, Text, View, Document, StyleSheet } from '@react-pdf/renderer';
-// import {useInvoiceQuotationContext} from '../../../context/invoiceQuotationContext';
 import './invQuo.css';
 
 // Define PDF styles
 const styles = StyleSheet.create({
-    page: { padding: 30 },
-    section: { marginBottom: 10 },
-    tableHeader: { flexDirection: 'row', borderBottomWidth: 1, borderBottomColor: '#000' },
-    tableRow: { flexDirection: 'row', marginBottom: 5 },
-    tableCell: { width: '25%' }
+    page: {
+        padding: 30,
+        fontSize: 10,
+        fontFamily: 'Helvetica',
+    },
+    section: {
+        marginBottom: 10,
+    },
+    companyHeader: {
+        fontWeight: 'bold',
+        fontSize: 14,
+        textAlign: 'center',
+        marginBottom: 10,
+    },
+    companySubHeader: {
+        fontSize: 10,
+        textAlign: 'center',
+        marginBottom: 20,
+    },
+    companyInfo: {
+        fontSize: 10,
+        marginBottom: 20,
+    },
+    billTo: {
+        marginTop: 20,
+        marginBottom: 20,
+        fontSize: 10,
+    },
+    tableHeader: {
+        flexDirection: 'row',
+        borderBottomWidth: 1,
+        borderBottomColor: '#000',
+        paddingBottom: 5,
+        fontWeight: 'bold',
+    },
+    tableRow: {
+        flexDirection: 'row',
+        marginBottom: 5,
+        borderBottomWidth: 0.5,
+        borderBottomColor: '#ccc',
+    },
+    tableCell: {
+        width: '25%',
+        fontSize: 10,
+    },
+    totalSection: {
+        marginTop: 20,
+        fontSize: 12,
+        fontWeight: 'bold',
+        textAlign: 'right',
+    },
+    bankDetails: {
+        marginTop: 20,
+        fontSize: 10,
+    },
+    footerLine: {
+        width: '100%',
+        borderTopWidth: 1,
+        borderTopColor: '#000',
+        marginVertical: 5,
+    },
 });
 
-const InvoiceDocument = ({ formData, type, transactionId }) => (
+const InvoiceDocument = ({ formData, transactionId }) => (
     <Document>
         <Page className="invoice-container" style={styles.page}>
-            <View className="inv_num" style={styles.section}>
-                <Text>{type} No: {transactionId || 'N/A'}</Text>
+            {/* Company Information Section */}
+            <View style={styles.section}>
+                <Text style={styles.companyHeader}>
+                    MORIPE BUSINESS TRAINING & CONSULTANT PTY LTD
+                </Text>
+                <Text style={styles.companySubHeader}>Enterprise Development Solutions</Text>
+                <Text style={styles.companyInfo}>101 First Rd, Roda, Dasnato, 2090</Text>
+                <Text style={styles.companyInfo}>Phone: 011 443 0113</Text>
+                <Text style={styles.companyInfo}>Email: info@moripe.co.za</Text>
+                <Text style={styles.companyInfo}>VAT Number: 123456789</Text>
+            </View>
+
+            {/* Transaction Info */}
+            <View style={styles.section}>
+                <Text>Invoice No: {transactionId || 'N/A'}</Text>
                 <Text>Date: {new Date().toLocaleDateString()}</Text>
             </View>
-            <View className="company-info" style={styles.section}>
-                <Text>MORIPE BUSINESS TRAINING & CONSULTANT PTY LTD</Text>
-                <Text>Enterprise Development Solutions</Text>
-                <Text>101 First Rd, Roda, Dasnato, 2090</Text>
-                <Text>Phone: 011 443 0113</Text>
-                <Text>Email: info@moripe.co.za</Text>
-                <Text>VAT Number: 123456789</Text>
+
+            {/* Bill To Section */}
+            <View style={styles.billTo}>
+                <Text>Bill To:</Text>
+                <Text>{formData.customerName}</Text>
+                <Text>{formData.customerEmail}</Text>
             </View>
-            <View className="bill-to" style={styles.section}>
-                <Text>Bill To: {formData.customerName}</Text>
-                <Text>Email: {formData.customerEmail}</Text>
-            </View>
-            <View className="item-list" style={styles.section}>
+
+            {/* Item List */}
+            <View style={styles.section}>
                 <Text>Items:</Text>
                 <View style={styles.tableHeader}>
                     <Text style={styles.tableCell}>Description</Text>
@@ -44,20 +109,29 @@ const InvoiceDocument = ({ formData, type, transactionId }) => (
                         <Text style={styles.tableCell}>{item.description}</Text>
                         <Text style={styles.tableCell}>{item.quantity}</Text>
                         <Text style={styles.tableCell}>{item.price}</Text>
-                        <Text style={styles.tableCell}>{(item.quantity * item.price).toFixed(2)}</Text>
+                        <Text style={styles.tableCell}>
+                            {(item.quantity * item.price).toFixed(2)}
+                        </Text>
                     </View>
                 ))}
             </View>
-            <View style={styles.section}>
-                <Text>Total: {formData.total.toFixed(2)}</Text>
+
+            {/* Total Section */}
+            <View style={styles.totalSection}>
+                <Text>Total: ${formData.total.toFixed(2)}</Text>
             </View>
-            <View className="bank-details" style={styles.section}>
+
+            {/* Bank Details Section */}
+            <View style={styles.bankDetails}>
                 <Text>Bank Details:</Text>
                 <Text>Bank Name: {formData.bankName}</Text>
                 <Text>Account Number: {formData.accountNumber}</Text>
                 <Text>Branch Name: {formData.branchName}</Text>
                 <Text>Branch Code: {formData.branchCode}</Text>
             </View>
+
+            {/* Footer Line */}
+            <View style={styles.footerLine} />
         </Page>
     </Document>
 );
@@ -72,7 +146,7 @@ export default function InvoiceQuotationForm({ onSubmit }) {
         bankName: '',
         accountNumber: '',
         branchName: '',
-        branchCode: ''
+        branchCode: '',
     });
 
     // Recalculate total whenever items change
@@ -91,6 +165,20 @@ export default function InvoiceQuotationForm({ onSubmit }) {
         setFormData({ ...formData, items: updatedItems });
     };
 
+    // Add new item
+    const addItem = () => {
+        setFormData((prev) => ({
+            ...prev,
+            items: [...prev.items, { description: '', quantity: 1, price: 0 }],
+        }));
+    };
+
+    // Remove item
+    const removeItem = (index) => {
+        const updatedItems = formData.items.filter((_, i) => i !== index);
+        setFormData((prev) => ({ ...prev, items: updatedItems }));
+    };
+
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -98,13 +186,13 @@ export default function InvoiceQuotationForm({ onSubmit }) {
         const transactionData = {
             account: formData.type, // Use type as account
             date: new Date(), // Current date
-            description: formData.items.map(item => item.description).join(', '), // Concatenate item descriptions
+            description: formData.items.map((item) => item.description).join(', '), // Concatenate item descriptions
             source: formData.customerName, // Use customer name as source
             amount: formData.total, // Total amount
             status: 'Pending', // Default status
             type: formData.type === 'Invoice' ? 'Income' : 'Expense', // Set type based on formData.type
         };
-        
+
         onSubmit(transactionData, formData);
     };
 
@@ -161,21 +249,18 @@ export default function InvoiceQuotationForm({ onSubmit }) {
                             onChange={(e) => handleItemChange(index, e)}
                             placeholder="Price"
                         />
+                        <button type="button" onClick={() => removeItem(index)}>
+                            Remove Item
+                        </button>
                     </div>
                 ))}
 
-                <button type="submit">
-                    Save {formData.type}
+                <button type="button" onClick={addItem}>
+                    Add Item
                 </button>
-            </form>
 
-            {/* Add PDF Generation */}
-            <PDFDownloadLink
-                document={<InvoiceDocument formData={formData} type={formData.type} transactionId="" />}
-                fileName={`${formData.type}.pdf`}
-            >
-                {({ loading }) => (loading ? 'Generating PDF...' : 'Download PDF')}
-            </PDFDownloadLink>
+                <button type="submit">Save {formData.type}</button>
+            </form>
         </>
     );
 }

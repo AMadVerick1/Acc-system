@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 export const useTotalBalance = () => {
   const { accounts,fetchAccounts } = useAccounts();
   const [totalBalance, setTotalBalance] = useState(null); // Store the total balance
-  const [loading, setLoading] = useState(true); // Loading state
+  // const [loading, setLoading] = useState(true); // Loading state
   const [error, setError] = useState(null); // Error state
 
   useEffect(() => {
@@ -32,8 +32,6 @@ export const useTotalBalance = () => {
     } catch (error) {
       console.error('Error calculating total balance in kpiServices:', error);
       setError(error); // Handle error
-    } finally {
-      setLoading(false); // Stop loading after calculation
     }
   };
 
@@ -41,7 +39,7 @@ export const useTotalBalance = () => {
     calculateTotalBalance(); // Calculate balance on mount
   }, []);
 
-  return { totalBalance, loading, error }; // Return balance, loading, and error
+  return { totalBalance }; // Return balance, loading, and error
 };
 
 
@@ -94,7 +92,7 @@ export const useIncomeVsExpenses = () => {
     calculateIncomeVsExpenses();
   }, []);
 
-  return { incomeVsExpenses, loading, error };
+  return { incomeVsExpenses };
 };
 
 

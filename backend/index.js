@@ -14,14 +14,14 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-// app.use('/api/auth', require('./routes/authRoutes'));
-// app.use('/users', require('./routes/userRoutes'));
+app.use('/api/auth', require('./routes/auth Routes'));
+app.use('/users', require('./routes/userRoutes'));
 app.use('/invoice-quotation', require('./routes/invoiceQuotationRoutes'));
 app.use('/accounts', require('./routes/accountsRoutes'));
 app.use('/budgets', require('./routes/budgetRoutes'));
 app.use('/transactions', require('./routes/transactionsRoutes'));
-// app.use('/payroll', require('./routes/payrollRoutes'));
-// app.use('/reports', require('./routes/reportsRoutes'));
+app.use('/payroll', require('./routes/payrollRoutes'));
+app.use('/reports', require('./routes/reportsRoutes'));
 
 // Connect to Database
 connectDB();

@@ -1,9 +1,10 @@
 .transaction-form {
     display: flex;
     flex-direction: column;
-    max-width: 600px;
-    height: auto;
+    width: 50%;
+    height: 50%;
     margin: 0 auto;
+    overflow-y: auto;
 }
 
 .form-group {

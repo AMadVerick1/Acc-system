@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const categorySchema = new mongoose.Schema({
-  _id: { type: mongoose.Schema.Types.ObjectId, default: new mongoose.Types.ObjectId }, // Add _id
+  _id: { type: mongoose.Schema.Types.ObjectId, default: new mongoose.Types.ObjectId }, 
   name: { type: String, required: true },
   allocatedAmount: { type: Number, default: 0, required: true },
   spentAmount: { type: Number, default: 0, required: true },

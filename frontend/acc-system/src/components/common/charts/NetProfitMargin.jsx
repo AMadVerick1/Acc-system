@@ -29,7 +29,7 @@ const NetProfitMarginChart = () => {
   });
 
   useEffect(() => {
-    const categories = ['January', 'February', 'March']; // Replace with dynamic dates or months
+    const categories = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']; // Replace with dynamic dates or months
     const netProfitMargin = categories.map((month) => {
       const revenue = transactions
         .filter((t) => t.type === 'income' && t.date.includes(month))

@@ -93,11 +93,6 @@ const updateBudget = async (req, res) => {
     return res.status(400).json({ message: 'End date is required' });
   }
 
-  // Validate totalAmount
-  if (typeof totalAmount !== 'number' || totalAmount <= 0) {
-    return res.status(400).json({ message: 'Total amount must be a positive number' });
-  }
-
   // Validate startDate and endDate
   const start = new Date(startDate);
   const end = new Date(endDate);

@@ -25,7 +25,7 @@ const Sidebar = () => {
                         </NavLink>
                     </li>
                     <li>
-                        <NavLink to="/financial-overview" className="nav-item" activeClassName="active">
+                        <NavLink to="/finances-&-budget" className="nav-item" activeClassName="active">
                             <FaFileAlt className="nav-icon" />
                         </NavLink>
                     </li>
