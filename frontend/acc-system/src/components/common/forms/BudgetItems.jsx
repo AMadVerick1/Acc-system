@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useBudget } from '../../../context/budgetContext';
 import { useAccounts } from '../../../context/accountContext';
+import './budget_form.css';
 
 const AddBudgetForm = ({ onSubmit }) => {
   const { addBudget } = useBudget();
@@ -97,7 +98,7 @@ const AddBudgetForm = ({ onSubmit }) => {
 
   return (
     <form onSubmit={handleSubmit} className="add-budget-form">
-      <div>
+      <div className="form-group">
         <label>Budget Name</label>
         <input
           type="text"
@@ -107,7 +108,7 @@ const AddBudgetForm = ({ onSubmit }) => {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label htmlFor="account">Account:</label>
         <select
           id="account"
@@ -125,7 +126,7 @@ const AddBudgetForm = ({ onSubmit }) => {
         </select>
       </div>
 
-      <div>
+      <div className="form-group">
         <label>Total Amount</label>
         <input
           type="number"
@@ -136,7 +137,7 @@ const AddBudgetForm = ({ onSubmit }) => {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label>Start Date</label>
         <input
           type="date"
@@ -146,7 +147,7 @@ const AddBudgetForm = ({ onSubmit }) => {
         />
       </div>
 
-      <div>
+      <div className="form-group">
         <label>End Date</label>
         <input
           type="date"
@@ -160,32 +161,39 @@ const AddBudgetForm = ({ onSubmit }) => {
         <h4>Categories</h4>
         {categories.map((category, index) => (
           <div key={index} className="category">
-            <label>Category {index + 1}</label>
-
-            <input 
-              type="text" 
-              placeholder="Category Name"
-              value={category.name}
-              onChange={(e) => handleCategoryChange(index, 'name', e.target.value)}
-              required
-            />
-
-            <label htmlFor="allocatedAmount">Allocated Amount</label>
-            <input
-              type="number"
-              placeholder="Allocated Amount"
-              value={category.allocatedAmount}
-              onChange={(e) => handleCategoryChange(index, 'allocatedAmount', Number(e.target.value))}
-              required
-            />
-
-            <label htmlFor="spentAmount">Spent Amount</label>
-            <input
-              type="number"
-              placeholder="Spent Amount"
-              value={category.spentAmount}
-              onChange={(e) => handleCategoryChange(index, 'spentAmount', Number(e.target.value))}
-            />  
+            
+            <div className="category-form-group">
+              <label>Category {index + 1}</label>
+              <input 
+                type="text" 
+                placeholder="Category Name"
+                value={category.name}
+                onChange={(e) => handleCategoryChange(index, 'name', e.target.value)}
+                required
+              />
+            </div>
+            
+            <div className="category-form-group">
+              <label htmlFor="allocatedAmount">Allocated Amount</label>
+              <input
+                type="number"
+                placeholder="Allocated Amount"
+                value={category.allocatedAmount}
+                onChange={(e) => handleCategoryChange(index, 'allocatedAmount', Number(e.target.value))}
+                required
+              />
+            </div>
+            
+            <div className="category-form-group">
+              <label htmlFor="spentAmount">Spent Amount</label>
+              <input
+                type="number"
+                placeholder="Spent Amount"
+                value={category.spentAmount}
+                onChange={(e) => handleCategoryChange(index, 'spentAmount', Number(e.target.value))}
+                required
+              />
+            </div>
 
             {categories.length > 1 && (
               <button type="button" onClick={() => removeCategory(index)}>Remove Category</button>

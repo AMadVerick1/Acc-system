@@ -4,7 +4,6 @@ import { useTotalBalance, useIncomeVsExpenses, useNetWorth, useSavingsRate } fro
 const KPIMetrics = () => {
   // Using the custom hooks from kpiService
   const { totalBalance, loading: balanceLoading, error: balanceError } = useTotalBalance();
-  // const { efficiency, loading: efficiencyLoading, error: efficiencyError } = useBudgetEfficiency(budgetId);
   const { incomeVsExpenses, loading: incomeLoading, error: incomeError } = useIncomeVsExpenses();
   const { netWorth, loading: netWorthLoading, error: netWorthError } = useNetWorth();
   const { savingsRate, error: savingsError } = useSavingsRate();
@@ -20,9 +19,8 @@ const KPIMetrics = () => {
   }
 
   return (
-    <div>
+    <div className="kpi-metrics">
       <p>Total Balance: {totalBalance}</p>
-      {/* <p>Budget Efficiency: {efficiency}%</p> */}
       <p>Income: {incomeVsExpenses.income}</p>
       <p>Expenses: {incomeVsExpenses.expenses}</p>
       <p>Net: {incomeVsExpenses.net}</p>

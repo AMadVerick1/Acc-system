@@ -12,10 +12,10 @@ export default function OverallSummary() {
     useEffect(() => {
         // Calculate total income and expenses
         const income = transactions
-            .filter(t => t.type === 'income')
+            .filter(t => t.type.toLowerCase() === 'income')
             .reduce((sum, t) => sum + t.amount, 0);
         const expenses = transactions
-            .filter(t => t.type === 'expense')
+            .filter(t => t.type.toLowerCase() === 'expense')
             .reduce((sum, t) => sum + t.amount, 0);
 
         setTotalIncome(income);
@@ -38,7 +38,7 @@ export default function OverallSummary() {
             colors: ['#28a745', '#dc3545', '#007bff'],
             dataLabels: {
                 enabled: true,
-                formatter: (val) => `$${val.toFixed(2)}`
+                formatter: (val) => `R${val.toFixed(2)}`
             }
         };
 

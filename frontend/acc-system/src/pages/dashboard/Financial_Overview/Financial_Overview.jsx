@@ -19,7 +19,7 @@ export default function FinancialOverview() {
                 return (
                     <div className="financial-overview-content">
                         <IncomeExpenseChart />
-                        <KeyMetrics />
+                        {/* <KeyMetrics /> */}
                         <HealthIndicators />
                         <Insights />
                         <ExportOptions />

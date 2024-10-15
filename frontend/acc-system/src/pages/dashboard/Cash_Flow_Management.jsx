@@ -107,7 +107,7 @@ export default function CashFlow() {
 
     return (
         <div className="cashflow-dashboard">
-            <h1 className="csf-heading">Cash Flow Management</h1>
+            <h1 className="csf-heading">Transactions</h1>
 
             {/* Financial Metrics Cards */}
             <Cards metrics={metrics} />

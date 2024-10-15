@@ -1,0 +1,32 @@
+.budget-list ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    font-weight: 300;
+}
+
+.budget-list li {
+    display: flex;
+    padding: 10px;
+    color: #eee;
+    font-size: 25px;
+    margin-bottom: 5px;
+    align-items: center;
+    justify-content: space-between;
+    transition: smooth ease-in-out 2s;
+}
+
+.budget-list li:hover {
+    background-color: rgba(241, 241, 241, 0.6);
+    border-radius: 5px;
+    color: #110e0e; 
+    padding: 10px;
+}
+
+.budget-list h2{
+    color: #110e0e;
+    margin-bottom: 5px;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}

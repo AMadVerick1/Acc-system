@@ -23,6 +23,15 @@
     font-weight: bold;
 }
 
+.kpi-metrics p{
+    font-size: 1.5em;
+    font-weight: bold;
+    margin-bottom: 10px;
+    color: #333;
+    background-color: gainsboro;
+    padding: 10px;
+}
+
 /* Financial Health Indicators */
 
 .health-indicators {

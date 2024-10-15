@@ -1,0 +1,36 @@
+form.add-budget-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+form.add-budget-form .form-group {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+form.add-budget-form .form-group 
+input[type="text"],
+form.add-budget-form .form-group
+input[type="number"] {
+    width: auto;
+    padding: 5px;
+    font-size: 12px;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+}
+
+.categories-section{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.category-form-group{
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+

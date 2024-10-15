@@ -1,5 +1,5 @@
 h3{
-    color: #ffffff;
+    /* color: #ffffff; */
     font-size: 25px;
     margin-bottom: 20px;
 }
@@ -20,5 +20,16 @@ h3{
     padding: 20px;
     border: 1px solid #000000;
     border-radius: 8px;
+}
+
+.income-expense-chart{
+    background-color: rgba(255, 255, 255, 0.253);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    -webkit-backdrop-filter: blur(2.7px);
+    backdrop-filter: blur(2.7px);
+    border-radius: 8px;
+    fill: #ffffff;
+    padding: 20px;
 }
 

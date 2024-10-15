@@ -143,55 +143,60 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
 
     return (
         <form onSubmit={handleSubmit} className="transaction-form">
-            <div className="form-group">
+            <div className="form-group account">
                 <button type="button" onClick={() => setShowAccountForm(true)} className="btn-create-account">
                     + Create New Account
                 </button>
-                <label htmlFor="account">Account:</label>
-                <select
-                    id="account"
-                    name="account"
-                    value={formData.account}
-                    onChange={handleChange}
-                    required
-                >
-                    <option value="">Select an Account</option>
-                    {accounts.map((account) => (
-                        <option key={account._id} value={account._id}>
-                            {account.name} - {account.type}
-                        </option>
-                    ))}
-                </select>
+                <div className="account-selection">
+                    <label htmlFor="account">Account:</label>
+                    <select
+                        id="account"
+                        name="account"
+                        value={formData.account}
+                        onChange={handleChange}
+                        required
+                    >
+                        <option value="">Select an Account</option>
+                        {accounts.map((account) => (
+                            <option key={account._id} value={account._id}>
+                                {account.name} - {account.type}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                
             </div>
 
-            <div className="form-group">
+            <div className="form-group budget">
                 <button type="button" onClick={() => setShowBudgetForm(true)} className="btn-create-budget">
                     + Create New Budget
                 </button>
-                <label htmlFor="budget">Budget:</label>
-                <select
-                    id="budget"
-                    name="budget"
-                    value={formData.budget}
-                    onChange={(e) => {
-                        handleChange(e);
-                        setSelectedBudget(e.target.value);
-                        setSelectedCategory(''); // Reset category selection when changing budget
-                    }}
-                    required
-                >
-                    <option value="">Select a Budget</option>
-                    {budgetItems.map((budgetItem) => (
-                        <option key={budgetItem._id} value={budgetItem._id}>
-                            {budgetItem.name} - {budgetItem.totalAmount}
-                        </option>
-                    ))}
-                </select>
+                <div className="button-selection">
+                    <label htmlFor="budget">Budget:</label>
+                    <select
+                        id="budget"
+                        name="budget"
+                        value={formData.budget}
+                        onChange={(e) => {
+                            handleChange(e);
+                            setSelectedBudget(e.target.value);
+                            setSelectedCategory(''); // Reset category selection when changing budget
+                        }}
+                        required
+                    >
+                        <option value="">Select a Budget</option>
+                        {budgetItems.map((budgetItem) => (
+                            <option key={budgetItem._id} value={budgetItem._id}>
+                                {budgetItem.name} - {budgetItem.totalAmount}
+                            </option>
+                        ))}
+                    </select>
+                </div>           
             </div>
 
             {/* Select category within the chosen budget */}
             {selectedBudget && (
-                <div className="form-group">
+                <div className="form-group category">
                     <label htmlFor="category">Category:</label>
                     <select
                         id="category"
@@ -212,7 +217,7 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
                 </div>
             )}
 
-            <div className="form-group">
+            <div className="form-group date">
                 <label htmlFor="date">Date:</label>
                 <input
                     type="date"
@@ -223,7 +228,7 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
                 />
             </div>
 
-            <div className="form-group">
+            <div className="form-group description">
                 <label htmlFor="description">Description:</label>
                 <input
                     type="text"
@@ -235,7 +240,7 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
                 />
             </div>
 
-            <div className="form-group">
+            <div className="form-group source">
                 <label htmlFor="source">Source:</label>
                 <input
                     type="text"
@@ -247,7 +252,7 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
                 />
             </div>
 
-            <div className="form-group">
+            <div className="form-group amount">
                 <label htmlFor="amount">Amount:</label>
                 <input
                     type="number"
@@ -259,7 +264,7 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
                 />
             </div>
 
-            <div className="form-group">
+            <div className="form-group type">
                 <label htmlFor="type">Transaction Type:</label>
                 <select
                     id="type"
@@ -272,7 +277,7 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
                 </select>
             </div>
 
-            <div className="form-group">
+            <div className="form-group status">
                 <label htmlFor="status">Status:</label>
                 <select
                     id="status"

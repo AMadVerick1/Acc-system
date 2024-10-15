@@ -1,12 +1,12 @@
 import '../styles.css';
 import React, { useState, useEffect } from 'react';
-import BudgetItemsTable from '../../../components/common/tables/BudgetTable';
-import AddBudgetItemModal from '../../../components/common/modals/BudgetItemsModal';
 import { useBudget } from '../../../context/budgetContext';
 import BudgetList from '../../../components/common/budget_list/Budget_List';
 import BudgetSummary from '../../../components/common/metrics/BudgetSummary';
-import BudgetProgress from '../../../components/common/notifications/budgetProgress';
+import BudgetItemsTable from '../../../components/common/tables/BudgetTable';
 import BudgetAlert from '../../../components/common/notifications/budgetAlerts';
+import AddBudgetItemModal from '../../../components/common/modals/BudgetItemsModal';
+import BudgetProgress from '../../../components/common/notifications/budgetProgress';
 
 export default function BudgetOverview() {
     const { budgetItems, fetchBudgetOverview, addBudget, editBudgetItem, removeBudgetItem, error } = useBudget();
@@ -101,8 +101,8 @@ export default function BudgetOverview() {
 
                 <div className="budget-metrics">
                     <p>Total Budget: {totalBudget}</p>
-                    <p>Allocated: {totalAllocated}</p>
-                    <p>Remaining: {remainingBudget}</p>
+                    {/* <p>Allocated: {totalAllocated}</p>
+                    <p>Remaining: {remainingBudget}</p> */}
                 </div>
 
                 <button className="btn-add" onClick={() => {

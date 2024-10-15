@@ -129,7 +129,6 @@ export default function AllTransactions({ transactions, onEdit }) {
     const [transactionRows, setTransactionRows] = useState([]);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const [modalIsOpen, setModalIsOpen] = useState(false);
-    const [formType, setFormType] = useState(null);
     const [invoiceData, setInvoiceData] = useState(null);  // State to hold the invoice data
 
     const headers = ['Date', 'Account Name', 'Description', 'Source', 'Amount', 'Status', 'Actions'];
@@ -175,12 +174,12 @@ export default function AllTransactions({ transactions, onEdit }) {
     const handleGenerateInvoice = (customerData) => {
         const formData = {
             ...selectedTransaction,
-            customerName: customerData.customerName,
-            customerEmail: customerData.customerEmail,
+            customerName: selectedTransaction.account ? customerData.name : selectedTransaction.customerName,
+            customerEmail: selectedTransaction.customerEmail ? customerData.email : selectedTransaction.customerEmail, 
             items: [{ 
                 description: selectedTransaction.description,
                 date: selectedTransaction.date,
-                quantity: 1,  // Assuming 1 as default
+                quantity: 1,
                 amount: selectedTransaction.amount
             }],
             total: selectedTransaction.amount

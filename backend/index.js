@@ -14,7 +14,7 @@ app.use(express.json());
 app.use(cors());
 
 // Routes
-app.use('/api/auth', require('./routes/auth Routes'));
+// app.use('/api/auth', require('./routes/auth Routes'));
 app.use('/users', require('./routes/userRoutes'));
 app.use('/invoice-quotation', require('./routes/invoiceQuotationRoutes'));
 app.use('/accounts', require('./routes/accountsRoutes'));

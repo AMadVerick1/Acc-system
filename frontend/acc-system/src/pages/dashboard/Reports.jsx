@@ -23,8 +23,8 @@ export default function Reports() {
                 return <CashFlowStatements />;
             case 'sales-revenue-analysis':
                 return <SalesRevenueAnalysis />;
-            case 'expense-reports':
-                return <ExpenseReports />;
+            // case 'expense-reports':
+            //     return <ExpenseReports />;
             default:
                 return <OverallSummary />;
         }
@@ -41,7 +41,7 @@ export default function Reports() {
                         <li className={`list-item ${activeView === 'income-statements' ? 'active' : ''}`} onClick={() => setActiveView('income-statements')}>Income Statements</li>
                         <li className={`list-item ${activeView === 'cash-flow-statements' ? 'active' : ''}`} onClick={() => setActiveView('cash-flow-statements')}>Cash Flow Statements</li>
                         <li className={`list-item ${activeView === 'sales-revenue-analysis' ? 'active' : ''}`} onClick={() => setActiveView('sales-revenue-analysis')}>Sales and Revenue Analysis</li>
-                        <li className={`list-item ${activeView === 'expense-reports' ? 'active' : ''}`} onClick={() => setActiveView('expense-reports')}>Expense Reports</li>
+                        {/* <li className={`list-item ${activeView === 'expense-reports' ? 'active' : ''}`} onClick={() => setActiveView('expense-reports')}>Expense Reports</li> */}
                         {/* <li className={`list-item ${activeView === 'vat-reports' ? 'active' : ''}`} onClick={() => setActiveView('vat-reports')}>VAT Reports</li> */}
                     </ul>
                 </div>
