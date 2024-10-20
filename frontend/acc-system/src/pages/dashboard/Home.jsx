@@ -5,6 +5,7 @@ import { useBudget } from '../../context/budgetContext';
 import { useAccounts } from '../../context/accountContext';
 import { useTransactions } from '../../context/transactionContext';
 import { useTotalBalance, useIncomeVsExpenses, useNetWorth, useSavingsRate } from '../../services/kpiService';
+import Insights from '../../components/common/metrics/Insights';
 
 
 export default function Dashboard() {
@@ -65,71 +66,71 @@ export default function Dashboard() {
         // { title: 'Income vs Expenses', value: incomeVsExpenses },
     ];
 
-    useEffect(() => {
-        const options = {
-            series: [{
-                name: 'Expenses',
-                data: transactions.filter(t => t.type === 'expense').map(t => t.amount)
-            }],
-            chart: {
-                type: 'pie',
-            },
-            xaxis: {
-                categories: transactions.filter(t => t.type === 'expense').map(t => t.description),
-            }
-        };
+    // useEffect(() => {
+    //     const options = {
+    //         series: [{
+    //             name: 'Expenses',
+    //             data: transactions.filter(t => t.type === 'expense').map(t => t.amount)
+    //         }],
+    //         chart: {
+    //             type: 'bar',
+    //         },
+    //         xaxis: {
+    //             categories: transactions.filter(t => t.type === 'expense').map(t => t.description),
+    //         }
+    //     };
 
-        const chart = new ApexCharts(document.querySelector(".expense-breakdown"), options);
-        chart.render();
+    //     const chart = new ApexCharts(document.querySelector(".expense-breakdown"), options);
+    //     chart.render();
 
-        return () => {
-            chart.destroy();
-        };
-    }, [transactions]);
-
-
-    useEffect(() => {
-        const options = {
-            series: [{
-                name: 'Income',
-                data: transactions.filter(t => t.type === 'income').map(t => t.amount)
-            }],
-            chart: {
-                type: 'bar',
-            },
-            xaxis: {
-                categories: transactions.filter(t => t.type === 'income').map(t => t.description),
-            }
-        };
-
-        const chart = new ApexCharts(document.querySelector(".income-breakdown"), options);
-        chart.render();
-
-        return () => {
-            chart.destroy();
-        };
-    }, [transactions]);
+    //     return () => {
+    //         chart.destroy();
+    //     };
+    // }, [transactions]);
 
 
-    useEffect(() => {
-        const options = {
-            series: [{
-                name: 'Balance',
-                data: transactions.map(t => t.amount)
-            }],
-            chart: {
-                    type: 'bar',
-                }
+    // useEffect(() => {
+    //     const options = {
+    //         series: [{
+    //             name: 'Income',
+    //             data: transactions.filter(t => t.type === 'income').map(t => t.amount)
+    //         }],
+    //         chart: {
+    //             type: 'bar',
+    //         },
+    //         xaxis: {
+    //             categories: transactions.filter(t => t.type === 'income').map(t => t.description),
+    //         }
+    //     };
 
-        };
+    //     const chart = new ApexCharts(document.querySelector(".income-breakdown"), options);
+    //     chart.render();
 
-        const chart = new ApexCharts(document.querySelector(".balance-breakdown"), options);
-        chart.render();
+    //     return () => {
+    //         chart.destroy();
+    //     };
+    // }, [transactions]);
 
-        return () => {
-            chart.destroy();
-        };
-    }, [transactions]);
+
+    // useEffect(() => {
+    //     const options = {
+    //         series: [{
+    //             name: 'Balance',
+    //             data: transactions.map(t => t.amount)
+    //         }],
+    //         chart: {
+    //             type: 'bar',
+    //         }  
+
+    //     };
+
+    //     const chart = new ApexCharts(document.querySelector(".balance-breakdown"), options);
+    //     chart.render();
+
+    //     return () => {
+    //         chart.destroy();
+    //     };
+    // }, [transactions]);
 
     return (
         <div className="dashboard">
@@ -152,9 +153,9 @@ export default function Dashboard() {
 
                         <div className="row3">
                             <div className="insights">
-                                <h3>Insights</h3>
+                                {/* <h3>Insights</h3> */}
                                 {/* insights information retrieved from budget */}
-
+                                <Insights />
                             </div>
                         </div>
                     </div>

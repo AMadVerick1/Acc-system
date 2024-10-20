@@ -69,18 +69,11 @@ function EmployeeList() {
                 <tbody>
                     {/* Placeholder rows */}
                     <tr>
-                        <td>John Doe</td>
-                        <td>Accountant</td>
-                        <td>$5,000</td>
-                        <td>$4,200</td>
-                        <td>Paid</td>
-                    </tr>
-                    <tr>
-                        <td>Jane Smith</td>
-                        <td>Manager</td>
-                        <td>$6,500</td>
-                        <td>$5,600</td>
-                        <td>Unpaid</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
                     </tr>
                 </tbody>
             </table>
@@ -106,10 +99,10 @@ function SalaryManagement() {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>John Doe</td>
-                            <td>$5,000</td>
-                            <td>Grade B</td>
-                            <td>Monthly</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <button className="edit-button">Edit</button>
                             </td>
@@ -140,10 +133,10 @@ function DeductionsBenefits() {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Jane Smith</td>
-                            <td>$300 (Medical Aid)</td>
-                            <td>$200 (Transport Allowance)</td>
-                            <td>$100 Deducted</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <button className="edit-button">Edit</button>
                             </td>
@@ -173,11 +166,11 @@ function TaxCalculations() {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>John Doe</td>
-                            <td>$5,000</td>
-                            <td>$4,500</td>
-                            <td>15%</td>
-                            <td>$675</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
@@ -204,10 +197,10 @@ function PayslipGeneration() {
                     </thead>
                     <tbody>
                         <tr>
-                            <td>Jane Smith</td>
-                            <td>Manager</td>
-                            <td>$5,600</td>
-                            <td>Ready</td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                             <td>
                                 <button className="generate-button">Generate</button>
                             </td>

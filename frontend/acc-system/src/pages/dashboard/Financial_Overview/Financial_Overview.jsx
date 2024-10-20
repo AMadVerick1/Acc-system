@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import BudgetOverview from './BudgetOverview';
 import Insights from '../../../components/common/metrics/Insights';
 import HealthIndicators from '../../../components/common/metrics/FinancialHealthIndicators';
-import KeyMetrics from '../../../components/common/metrics/KeyMetrics';
+// import KeyMetrics from '../../../components/common/metrics/KeyMetrics';
 import IncomeExpenseChart from '../../../components/common/charts/IncomeExpenseChart';
 import ExportOptions from '../../../components/common/export/ExportOptions';
 
