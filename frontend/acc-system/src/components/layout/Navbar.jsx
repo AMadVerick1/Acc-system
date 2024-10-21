@@ -10,8 +10,6 @@ const Navbar = () => {
                 <img src= {logo} alt="logo"></img>
             </div>
             <ul className="navbar-links">
-                <li><a href="">Notifications</a></li>
-                <li><a href="">Settings</a></li>
                 <li><a href="">Sign-out</a></li>
             </ul>
         </nav>
