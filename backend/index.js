@@ -12,6 +12,11 @@ const app = express();
 // middleware
 app.use(express.json());
 app.use(cors());
+// const corsOptions = {
+//     origin: process.env.NODE_ENV === 'production' ? 'https://your-frontend-domain.com' : '*',
+//     optionsSuccessStatus: 200
+// };
+// app.use(cors(corsOptions));
 
 // Routes
 // app.use('/api/auth', require('./routes/auth Routes'));

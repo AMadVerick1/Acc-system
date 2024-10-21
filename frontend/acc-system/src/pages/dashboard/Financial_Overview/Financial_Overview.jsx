@@ -6,7 +6,7 @@ import Insights from '../../../components/common/metrics/Insights';
 import HealthIndicators from '../../../components/common/metrics/FinancialHealthIndicators';
 // import KeyMetrics from '../../../components/common/metrics/KeyMetrics';
 import IncomeExpenseChart from '../../../components/common/charts/IncomeExpenseChart';
-import ExportOptions from '../../../components/common/export/ExportOptions';
+// import ExportOptions from '../../../components/common/export/ExportOptions';
 
 export default function FinancialOverview() {
     const [activeTab, setActiveTab] = useState('financial');
@@ -22,7 +22,7 @@ export default function FinancialOverview() {
                         {/* <KeyMetrics /> */}
                         <HealthIndicators />
                         <Insights />
-                        <ExportOptions />
+                        {/* <ExportOptions /> */}
                     </div>
                 );
             default:

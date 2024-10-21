@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAccounts } from '../../../context/accountContext';
 import { useTransactions } from '../../../context/transactionContext';
-import HealthIndicators from './FinancialHealthIndicators.jsx'; 
+import ExportOptions from '../export/ExportOptions'; // Import ExportOptions component
 
 export default function Insights() {
     const [insights, setInsights] = useState([]);
@@ -201,6 +201,15 @@ export default function Insights() {
         return insightsList;
     };
 
+    const exportData = [
+        { name: 'Operating Cashflow', value: operatingCashflow },
+        { name: 'Working Capital', value: workingCapital },
+        { name: 'Current Ratio', value: currentRatio },
+        { name: 'Debt-to-Equity Ratio', value: debtToEquity },
+        { name: 'Quick Ratio', value: quickRatio },
+        { name: 'Leverage', value: leverage },
+    ];
+
     return (
         <div className="insights-page">
             <h2>Financial Insights & Recommendations</h2>
@@ -214,6 +223,7 @@ export default function Insights() {
                 ) : (
                     <p>No insights available yet. Please check back later.</p>
                 )}
+                <ExportOptions data={exportData} /> 
             </div>
         </div>
     );

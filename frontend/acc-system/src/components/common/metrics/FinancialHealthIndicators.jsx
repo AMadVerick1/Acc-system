@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAccounts } from '../../../context/accountContext';
 import { useTransactions } from '../../../context/transactionContext';
+import ExportOptions from '../export/ExportOptions'; // Import ExportOptions component
 import './metrics.css';
 
 export default function HealthIndicators() {
@@ -17,38 +18,23 @@ export default function HealthIndicators() {
 
     // Calculate Total Assets
     const calculateTotalAssets = () => {
-        let totalAssets = 0;
-        accounts.forEach(account => {
-            if (account.category === 'assets') {
-                totalAssets += account.balance || 0;
-            }
-        });
-        console.log('Total Assets:', totalAssets);
-        return totalAssets;
+        return accounts
+            .filter(account => account.category === 'assets')
+            .reduce((total, account) => total + (account.balance || 0), 0);
     };
 
     // Calculate Total Liabilities
     const calculateTotalLiabilities = () => {
-        let totalLiabilities = 0;
-        accounts.forEach(account => {
-            if (account.category === 'liability') {
-                totalLiabilities += account.balance || 0;
-            }
-        });
-        console.log('Total Liabilities:', totalLiabilities);
-        return totalLiabilities;
+        return accounts
+            .filter(account => account.category === 'liability')
+            .reduce((total, account) => total + (account.balance || 0), 0);
     };
 
     // Calculate Total Equity
     const calculateTotalEquity = () => {
-        let totalEquity = 0;
-        accounts.forEach(account => {
-            if (account.category === 'equity') {
-                totalEquity += account.balance || 0;
-            }
-        });
-        console.log('Total Equity:', totalEquity);
-        return totalEquity;
+        return accounts
+            .filter(account => account.category === 'equity')
+            .reduce((total, account) => total + (account.balance || 0), 0);
     };
 
     // Operating Cash Flow Calculation
@@ -59,10 +45,6 @@ export default function HealthIndicators() {
         const totalIncome = incomeTransactions.reduce((sum, transaction) => sum + (transaction.amount || 0), 0);
         const totalExpenses = expenseTransactions.reduce((sum, transaction) => sum + (transaction.amount || 0), 0);
 
-        console.log('Total Income:', totalIncome);
-        console.log('Total Expenses:', totalExpenses);
-        console.log('Operating Cashflow:', totalIncome - totalExpenses);
-
         return totalIncome - totalExpenses;
     };
 
@@ -70,82 +52,85 @@ export default function HealthIndicators() {
     const calculateDebtToEquity = () => {
         const totalLiabilities = calculateTotalLiabilities();
         const totalEquity = calculateTotalEquity();
-        const ratio = totalEquity !== 0 ? totalLiabilities / totalEquity : 0;
-        console.log('Debt-to-Equity Ratio:', ratio);
-        return ratio;
+        return totalEquity !== 0 ? totalLiabilities / totalEquity : 0;
     };
 
     // Current Ratio Calculation
     const calculateCurrentRatio = () => {
         const totalAssets = calculateTotalAssets();
         const totalLiabilities = calculateTotalLiabilities();
-        const ratio = totalLiabilities !== 0 ? totalAssets / totalLiabilities : 0;
-        console.log('Current Ratio:', ratio);
-        return ratio;
+        return totalLiabilities !== 0 ? totalAssets / totalLiabilities : 0;
     };
 
     // Working Capital Calculation
     const calculateWorkingCapital = () => {
         const totalAssets = calculateTotalAssets();
         const totalLiabilities = calculateTotalLiabilities();
-        const workingCapital = totalAssets - totalLiabilities;
-        console.log('Working Capital:', workingCapital);
-        return workingCapital;
+        return totalAssets - totalLiabilities;
     };
 
     // Calculate all indicators on component mount using useEffect
     useEffect(() => {
-        const fetchData = async () => {
-            const operatingCashflow = calculateOperatingCashFlow();
-            const workingCapital = calculateWorkingCapital();
-            const currentRatio = calculateCurrentRatio();
-            const debtToEquity = calculateDebtToEquity();
+        const operatingCashflow = calculateOperatingCashFlow();
+        const workingCapital = calculateWorkingCapital();
+        const currentRatio = calculateCurrentRatio();
+        const debtToEquity = calculateDebtToEquity();
 
-            setOperatingCashflow(operatingCashflow);
-            setWorkingCapital(workingCapital);
-            setCurrentRatio(currentRatio);
-            setDebtToEquity(debtToEquity);
+        setOperatingCashflow(operatingCashflow);
+        setWorkingCapital(workingCapital);
+        setCurrentRatio(currentRatio);
+        setDebtToEquity(debtToEquity);
 
-            const totalAssets = calculateTotalAssets();
-            const totalLiabilities = calculateTotalLiabilities();
-            const leverageRatio = totalAssets !== 0 ? totalLiabilities / totalAssets : 0;
-            console.log('Leverage Ratio:', leverageRatio);
-            setLeverage(leverageRatio);
+        const totalAssets = calculateTotalAssets();
+        const totalLiabilities = calculateTotalLiabilities();
+        const leverageRatio = totalAssets !== 0 ? totalLiabilities / totalAssets : 0;
+        setLeverage(leverageRatio);
 
-            const quickAssets = totalAssets; // Assuming no inventory
-            const quickRatio = totalLiabilities !== 0 ? quickAssets / totalLiabilities : 0;
-            console.log('Quick Ratio:', quickRatio);
-            setQuickRatio(quickRatio);
-        };
+        const quickAssets = totalAssets; // Assuming no inventory
+        const quickRatio = totalLiabilities !== 0 ? quickAssets / totalLiabilities : 0;
+        setQuickRatio(quickRatio);
+    }, [accounts, transactions]); // Recalculate when accounts or transactions change
 
-        fetchData();
-    }, []);
+    // Combine calculated data to pass to ExportOptions
+    const data = {
+        operatingCashflow,
+        workingCapital,
+        currentRatio,
+        debtToEquity,
+        quickRatio,
+        leverage,
+    };
 
     return (
-        <div className="health-indicators">
-            <div className="indicator-card">
-                <h3>Operating Cashflow</h3>
-                <p>{operatingCashflow}</p>
-            </div>
-            <div className="indicator-card">
-                <h3>Working Capital</h3>
-                <p>{workingCapital}</p>
-            </div>
-            <div className="indicator-card">
-                <h3>Current Ratio</h3>
-                <p>{currentRatio}</p>
-            </div>
-            <div className="indicator-card">
-                <h3>Debt-to-Equity Ratio</h3>
-                <p>{debtToEquity}</p>
-            </div>
-            <div className="indicator-card">
-                <h3>Quick Ratio</h3>
-                <p>{quickRatio}</p>
-            </div>
-            <div className="indicator-card">
-                <h3>Leverage</h3>
-                <p>{leverage}</p>
+        <div className="financial-health-indicators">
+            <h1>Financial Health Indicators</h1>
+            <div className="health-indicators">
+                
+                <div className="indicator-card">
+                    <h3>Operating Cashflow</h3>
+                    <p>{operatingCashflow}</p>
+                </div>
+                <div className="indicator-card">
+                    <h3>Working Capital</h3>
+                    <p>{workingCapital}</p>
+                </div>
+                <div className="indicator-card">
+                    <h3>Current Ratio</h3>
+                    <p>{currentRatio}</p>
+                </div>
+                <div className="indicator-card">
+                    <h3>Debt-to-Equity Ratio</h3>
+                    <p>{debtToEquity}</p>
+                </div>
+                <div className="indicator-card">
+                    <h3>Quick Ratio</h3>
+                    <p>{quickRatio}</p>
+                </div>
+                <div className="indicator-card">
+                    <h3>Leverage</h3>
+                    <p>{leverage}</p>
+                </div>
+                <ExportOptions data={data} />
             </div>
         </div>
     );

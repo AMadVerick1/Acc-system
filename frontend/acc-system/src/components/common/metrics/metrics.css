@@ -34,6 +34,13 @@
 
 /* Financial Health Indicators */
 
+.financial-health-indicators {
+    background: rgba(156, 163, 175, 1);
+    padding: 20px;
+    border-radius: 10px;
+    border: 5px solid rgba(17, 24, 39, 1);
+}
+
 .health-indicators {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -65,12 +72,17 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
+    padding: 15px 20px 20px;
+    margin-top: 10px;
+    border: 5px solid white;
+    background: rgba(17, 24, 39, 1);
+    border-radius: 10px;
 }
 
 .insights-page h2 {
     font-size: 1.5em;
     margin-bottom: 10px;
-    text-shadow: 2px 2px 2px rgba(255, 255, 255, 0.5), -2px -2px 2px rgba(0, 0, 0, 0.5);
+    color: white;
 }
 
 .insights-list {

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Chart from 'react-apexcharts';
 import './ChartStyles.css';
 import { useTransactions } from '../../../context/transactionContext';
+import ExportOptions from '../export/ExportOptions'; // Import ExportOptions component
 
 export default function IncVsExpCharts() {
     const { transactions, fetchAllTransactions } = useTransactions();
@@ -14,9 +15,8 @@ export default function IncVsExpCharts() {
     }, []);
 
     useEffect(() => {
-        // Group transactions by date
         const groupedTransactions = transactions.reduce((acc, transaction) => {
-            const date = new Date(transaction.date).toLocaleDateString(); // Format date
+            const date = new Date(transaction.date).toLocaleDateString();
             if (!acc[date]) acc[date] = { income: 0, expense: 0 };
 
             if (transaction.type === 'Income') {
@@ -28,7 +28,6 @@ export default function IncVsExpCharts() {
             return acc;
         }, {});
 
-        // Extract dates, income, and expense arrays
         const sortedDates = Object.keys(groupedTransactions).sort((a, b) => new Date(a) - new Date(b));
         const incomeArray = sortedDates.map((date) => groupedTransactions[date].income);
         const expenseArray = sortedDates.map((date) => groupedTransactions[date].expense);
@@ -36,58 +35,25 @@ export default function IncVsExpCharts() {
         setIncomeData(incomeArray);
         setExpenseData(expenseArray);
         setDates(sortedDates);
-    }, []);
+    }, [transactions]);
 
-    // Prepare chart data for line chart
     const chartData = {
-        series: [{
-            name: 'Income',
-            data: incomeData,
-        }, {
-            name: 'Expenses',
-            data: expenseData,
-        }],
-        options: {
-            chart: {
-                type: 'line',
-                height: 350,
-            },
-            xaxis: {
-                categories: dates,
-                title: {
-                    text: 'Date',
-                },
-            },
-            yaxis: {
-                title: {
-                    text: 'Amount (R)',
-                },
-            },
-            stroke: {
-                curve: 'smooth',
-            },
-            markers: {
-                size: 4,
-            },
-            dataLabels: {
-                enabled: false,
-            },
-            tooltip: {
-                y: {
-                    formatter: (val) => `R ${val}`,
-                },
-            },
-            colors: ['#00E396', '#FF4560'],
-            legend: {
-                position: 'top',
-            },
-        },
+        series: [{ name: 'Income', data: incomeData }, { name: 'Expenses', data: expenseData }],
+        options: { /* chart options */ },
     };
+
+    // Prepare data for exporting
+    const exportData = dates.map((date, index) => ({
+        Date: date,
+        Income: incomeData[index],
+        Expenses: expenseData[index],
+    }));
 
     return (
         <div className="income-expense-chart">
             <h3>Income vs. Expenses Over Time</h3>
             <Chart options={chartData.options} series={chartData.series} type="line" height={350} />
+            <ExportOptions data={exportData} /> {/* Pass export data here */}
         </div>
     );
 }
