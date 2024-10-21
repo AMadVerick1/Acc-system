@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://localhost:5000';
+const API_BASE_URL = 'https://master.d1ett1tvi16xqx.amplifyapp.com/';
 
 export const getAllInvoiceQuotations = async () => {
     try {
