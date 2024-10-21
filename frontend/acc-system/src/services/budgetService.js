@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const baseURL = 'https://master.d1ett1tvi16xqx.amplifyapp.com/';
+const baseURL = 'https://master.d1ett1tvi16xqx.amplifyapp.com';
 
 // Get Budget Overview
 export const getBudgetOverview = async () => {

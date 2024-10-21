@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://master.d1ett1tvi16xqx.amplifyapp.com/'; 
+const API_BASE_URL = 'https://master.d1ett1tvi16xqx.amplifyapp.com'; 
 
 // Get All Transactions
 export const getAllTransactions = async () => {
