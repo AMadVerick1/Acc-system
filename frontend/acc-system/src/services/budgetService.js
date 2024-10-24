@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://https://master.d1ett1tvi16xqx.amplifyapp.com';
+const API_BASE_URL = 'http://acc-backend.us-east-1.elasticbeanstalk.com/';
 
 // Get Budget Overview
 export const getBudgetOverview = async () => {
