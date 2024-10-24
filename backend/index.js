@@ -34,7 +34,7 @@ if(process.env.NODE_ENV === 'production') {
 connectDB();
 
 // Start the server
-const PORT = process.env.PORT || 5000; // Use a default port if not in the .env file
+const PORT = process.env.BACKEND_API_URL || process.env.PORT; // Use a default port if not in the .env file
 app.listen(PORT, () => 
     console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 );
