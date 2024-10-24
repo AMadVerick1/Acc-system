@@ -1,4 +1,5 @@
 import { useTransactions } from "../../../context/transactionContext";
+import ExportOptions from "../export/ExportOptions";
 import { useEffect, useState } from "react";
 import ApexCharts from 'apexcharts';
 import './metrics.css';

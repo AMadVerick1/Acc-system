@@ -9,6 +9,7 @@ import OverallSummary from '../../components/common/metrics/OverallSummary';
 import IncomeStatements from '../../components/common/metrics/IncomeStatements';
 import CashFlowStatements from '../../components/common/metrics/CashFlowStatements';
 import SalesRevenueAnalysis from '../../components/common/metrics/SalesRevenueAnalysis';
+import ExportOptions from '../../components/common/export/ExportOptions';
 
 export default function Reports() {
     const [activeView, setActiveView] = useState('overall-summary');
@@ -56,8 +57,7 @@ export default function Reports() {
                     </div>
 
                     <div className="report-actions">
-                        <button className="export-button">Download as PDF</button>
-                        <button className="export-button">Export to Excel</button>
+                        
                     </div>
                 </div>
             </div>

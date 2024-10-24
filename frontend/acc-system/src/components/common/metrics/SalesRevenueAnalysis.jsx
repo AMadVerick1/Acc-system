@@ -1,4 +1,5 @@
 import { useTransactions } from "../../../context/transactionContext";
+import ExportOptions from "../export/ExportOptions";
 import { useEffect, useState } from "react";
 import ApexCharts from 'apexcharts';
 import './metrics.css';
@@ -8,9 +9,9 @@ export default function SalesRevenueAnalysis() {
     const [salesData, setSalesData] = useState([]);
     const [revenueData, setRevenueData] = useState([]);
     const [dates, setDates] = useState([]);
+    const [exportData, setExportData] = useState([]); // For export
 
     useEffect(() => {
-        // Group transactions by date and calculate sales and revenue for each date
         const sales = {};
         const revenue = {};
 
@@ -19,18 +20,25 @@ export default function SalesRevenueAnalysis() {
             if (!sales[date]) sales[date] = 0;
             if (!revenue[date]) revenue[date] = 0;
 
-            // Assuming 'income' is revenue, and 'expense' reduces sales
             if (t.type === 'income') {
                 sales[date] += t.amount;
-                revenue[date] += t.amount; // Here revenue could be calculated differently if needed
+                revenue[date] += t.amount;
             } else if (t.type === 'expense') {
-                sales[date] -= t.amount; // Assuming sales could be affected by expenses
+                sales[date] -= t.amount;
             }
         });
 
         setDates(Object.keys(sales));
         setSalesData(Object.values(sales));
         setRevenueData(Object.values(revenue));
+
+        // Prepare data for export
+        const exportFormattedData = Object.keys(sales).map(date => ({
+            Date: date,
+            Sales: sales[date],
+            Revenue: revenue[date]
+        }));
+        setExportData(exportFormattedData);
 
         // Create chart
         const chart = new ApexCharts(document.querySelector("#chart-sales-revenue-analysis"), {
@@ -65,7 +73,6 @@ export default function SalesRevenueAnalysis() {
 
         chart.render();
 
-        // Cleanup the chart when component unmounts
         return () => {
             chart.destroy();
         };
@@ -78,6 +85,7 @@ export default function SalesRevenueAnalysis() {
                 <p>Graphical representation of sales trends, revenue growth, and comparisons across periods.</p>
                 <div id="chart-sales-revenue-analysis"></div>
             </div>
+            <ExportOptions data={exportData} /> {/* Include export options */}
         </div>
     );
 }

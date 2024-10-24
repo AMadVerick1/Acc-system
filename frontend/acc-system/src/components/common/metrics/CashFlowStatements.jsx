@@ -1,4 +1,5 @@
 import { useTransactions } from "../../../context/transactionContext";
+import ExportOptions from "../export/ExportOptions";
 import { useEffect, useState } from "react";
 import './metrics.css';
 
@@ -8,6 +9,7 @@ export default function CashFlowStatements() {
     const [investingActivities, setInvestingActivities] = useState(0);
     const [financingActivities, setFinancingActivities] = useState(0);
     const [netCashFlow, setNetCashFlow] = useState(0);
+    const [exportData, setExportData] = useState([]); // For export
 
     useEffect(() => {
         // Calculate Cash Flow from Operating Activities
@@ -32,6 +34,16 @@ export default function CashFlowStatements() {
         setInvestingActivities(investing);
         setFinancingActivities(financing);
         setNetCashFlow(netCash);
+
+        // Prepare data for export
+        const exportFormattedData = [{
+            Period: new Date().toLocaleDateString(),
+            "Operating Activities": `R${operating.toFixed(2)}`,
+            "Investing Activities": `R${investing.toFixed(2)}`,
+            "Financing Activities": `R${financing.toFixed(2)}`,
+            "Net Cash Flow": `R${netCash.toFixed(2)}`
+        }];
+        setExportData(exportFormattedData);
     }, [transactions]);
 
     return (
@@ -57,6 +69,8 @@ export default function CashFlowStatements() {
                     </tr>
                 </tbody>
             </table>
+
+            <ExportOptions data={exportData} /> {/* Include export options */}
         </div>
     );
 }
