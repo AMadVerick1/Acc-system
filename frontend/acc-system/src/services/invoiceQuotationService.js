@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://67.202.33.127:5000';
+const API_BASE_URL = ' https://979a-67-202-33-127.ngrok-free.app';
 
 export const getAllInvoiceQuotations = async () => {
     try {
