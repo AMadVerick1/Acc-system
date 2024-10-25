@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'https://https://master.d1ett1tvi16xqx.amplifyapp.com';
+const API_BASE_URL = 'https://67.202.33.127:5000';
 
 export const getAllInvoiceQuotations = async () => {
     try {
