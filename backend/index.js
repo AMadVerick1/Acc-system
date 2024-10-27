@@ -3,6 +3,7 @@ const express = require('express');
 const connectDB = require('./config/db'); 
 const cors = require('cors');
 const path = require('path');
+const axios = require('axios'); // Add Axios for making HTTP requests
 
 const app = express();
 
@@ -15,10 +16,32 @@ console.log('JSON middleware activated.');
 app.use(cors());
 console.log('CORS middleware activated.');
 
-// Debug log for incoming requests (helpful to see what requests are being made)
+// Debug log for incoming requests
 app.use((req, res, next) => {
     console.log(`Received a ${req.method} request for ${req.url}`);
     next();
+});
+
+// Proxy route for HTTP API
+app.use('/', async (req, res) => {
+    try {
+        const response = await axios({
+            method: req.method,
+            url: `http://67.202.33.127:5000${req.url}`, // Change this to your HTTP API base URL
+            data: req.body,
+            headers: {
+                'Content-Type': 'application/json',
+                // Forward any other headers if needed
+                ...req.headers,
+            },
+        });
+        res.status(response.status).json(response.data);
+    } catch (error) {
+        console.error(error);
+        res.status(error.response?.status || 500).json({
+            message: error.message || 'Internal Server Error',
+        });
+    }
 });
 
 // Routes
