@@ -1,4 +1,6 @@
 require('dotenv').config();
+const fs = require('fs');
+const https = require('https');
 const express = require('express');
 const connectDB = require('./config/db'); 
 const cors = require('cors');
@@ -15,7 +17,7 @@ console.log('JSON middleware activated.');
 app.use(cors());
 console.log('CORS middleware activated.');
 
-// Debug log for incoming requests (helpful to see what requests are being made)
+// Debug log for incoming requests
 app.use((req, res, next) => {
     console.log(`Received a ${req.method} request for ${req.url}`);
     next();
@@ -62,8 +64,15 @@ connectDB().then(() => {
     console.error('Database connection error:', err.message);
 });
 
-// Start the server
+// Load SSL Certificates
+const sslOptions = {
+    key: fs.readFileSync(process.env.SSL_KEY_PATH, 'utf8'),
+    cert: fs.readFileSync(process.env.SSL_CERT_PATH, 'utf8'),
+    ca: fs.readFileSync(process.env.SSL_CA_PATH, 'utf8'),
+};
+
+// Start HTTPS server
 const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => 
-    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
+https.createServer(sslOptions, app).listen(PORT, () => 
+    console.log(`Server running in ${process.env.NODE_ENV} mode on Port:${PORT}`)
 );

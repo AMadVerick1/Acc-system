@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 
-const API_URL = 'https://master.d1ett1tvi16xqx.amplifyapp.com';
+const API_URL = 'hpacc.primaveraconcepts.com';
 
 export const getAllUsers = async () => {
   try {
