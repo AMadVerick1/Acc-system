@@ -1,7 +1,7 @@
 import axios from 'axios';
 // import api from './api'
 
-const API_BASE_URL = 'https://67.202.33.127:5000'; 
+const API_BASE_URL = 'http://67.202.33.127:5000'; 
 
 // Get All Transactions
 export const getAllTransactions = async () => {
