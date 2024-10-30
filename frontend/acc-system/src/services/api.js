@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Set up the axios instance
 const api = axios.create({
-  baseURL: 'hpacc.primaveraconcepts.com',
+  baseURL: 'http://67.202.33.127:5000',
 });
 
 export default api;

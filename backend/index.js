@@ -64,15 +64,22 @@ connectDB().then(() => {
     console.error('Database connection error:', err.message);
 });
 
-// Load SSL Certificates
-const sslOptions = {
-    key: fs.readFileSync(process.env.SSL_KEY_PATH, 'utf8'),
-    cert: fs.readFileSync(process.env.SSL_CERT_PATH, 'utf8'),
-    ca: fs.readFileSync(process.env.SSL_CA_PATH, 'utf8'),
-};
+// Load SSL Certificates with Debugging
+let sslOptions;
+try {
+    sslOptions = {
+        key: fs.readFileSync(process.env.SSL_KEY_PATH, 'utf8'),
+        cert: fs.readFileSync(process.env.SSL_CERT_PATH, 'utf8'),
+        ca: fs.readFileSync(process.env.SSL_CA_PATH, 'utf8'),
+    };
+    console.log('SSL key, certificate, and CA files read successfully.');
+} catch (error) {
+    console.error('Error reading SSL files:', error.message);
+    process.exit(1); // Exit if any of the SSL files cannot be read
+}
 
 // Start HTTPS server
 const PORT = process.env.PORT || 5000;
 https.createServer(sslOptions, app).listen(PORT, () => 
-    console.log(`Server running in ${process.env.NODE_ENV} mode on Port:${PORT}`)
+    console.log(`Server running in ${process.env.NODE_ENV} mode on Port: ${PORT}`)
 );
