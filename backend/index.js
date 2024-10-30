@@ -1,6 +1,4 @@
 require('dotenv').config();
-const fs = require('fs');
-const https = require('https');
 const express = require('express');
 const connectDB = require('./config/db'); 
 const cors = require('cors');
@@ -15,9 +13,9 @@ console.log('Starting the server...');
 app.use(express.json());
 console.log('JSON middleware activated.');
 app.use(cors());
-console.log('CORS middleware activated.');
+ console.log('CORS middleware activated.');
 
-// Debug log for incoming requests
+// Debug log for incoming requests (helpful to see what requests are being made)
 app.use((req, res, next) => {
     console.log(`Received a ${req.method} request for ${req.url}`);
     next();
@@ -64,22 +62,8 @@ connectDB().then(() => {
     console.error('Database connection error:', err.message);
 });
 
-// Load SSL Certificates with Debugging
-let sslOptions;
-try {
-    sslOptions = {
-        key: fs.readFileSync(process.env.SSL_KEY_PATH, 'utf8'),
-        cert: fs.readFileSync(process.env.SSL_CERT_PATH, 'utf8'),
-        ca: fs.readFileSync(process.env.SSL_CA_PATH, 'utf8'),
-    };
-    console.log('SSL key, certificate, and CA files read successfully.');
-} catch (error) {
-    console.error('Error reading SSL files:', error.message);
-    process.exit(1); // Exit if any of the SSL files cannot be read
-}
-
-// Start HTTPS server
-const PORT = process.env.PORT || 5000;
-https.createServer(sslOptions, app).listen(PORT, () => 
-    console.log(`Server running in ${process.env.NODE_ENV} mode on Port: ${PORT}`)
+// Start the server
+const PORT  = process.env.PORT || 5000;
+app.listen(PORT, () => 
+    console.log(`Server running in ${process.env.NODE_ENV} mode on port ${PORT}`)
 );
