@@ -180,7 +180,7 @@ export default function TransactionForm({ onSubmit, initialData, invoiceQuotatio
                         onChange={(e) => {
                             handleChange(e);
                             setSelectedBudget(e.target.value);
-                            setSelectedCategory(''); // Reset category selection when changing budget
+                            setSelectedCategory(''); 
                         }}
                         required
                     >

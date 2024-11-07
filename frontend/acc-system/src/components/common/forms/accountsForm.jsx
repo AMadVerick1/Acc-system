@@ -44,7 +44,7 @@ const AccountForm = ({ onSubmit }) => {
       {error && <p style={{ color: 'red' }}>{error}</p>}
       {successMessage && <p style={{ color: 'green' }}>{successMessage}</p>}
 
-      <div>
+      <div className="form-row">
         <label>Account Name</label>
         <input
           type="text"
@@ -55,7 +55,7 @@ const AccountForm = ({ onSubmit }) => {
         />
       </div>
 
-      <div>
+      <div className="form-row">
         <label>Account Type</label>
         <select name="type" value={accountData.type} onChange={handleChange} required>
           <option value="savings">Savings</option>
@@ -63,7 +63,7 @@ const AccountForm = ({ onSubmit }) => {
         </select>
       </div>
 
-      <div>
+      <div className="form-row">
         <label>Account Category</label>
         <select name="category" value={accountData.category} onChange={handleChange} required>
           <option value="asset">Asset</option>
@@ -72,7 +72,7 @@ const AccountForm = ({ onSubmit }) => {
         </select>
       </div>
 
-      <div>
+      <div className="form-row">
         <label>Balance</label>
         <input
           type="number"

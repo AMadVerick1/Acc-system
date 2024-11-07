@@ -42,7 +42,13 @@
 label{
     color: #333;
     font-weight: bold;
-    margin-bottom: 0.5rem;
+    margin: 3px;
+}
+
+.form-row{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
 }
 
 .form-group button{

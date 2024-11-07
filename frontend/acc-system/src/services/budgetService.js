@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = 'http://67.202.33.127:5000';
+const API_BASE_URL = 'http://localhost:5000';
 
 // Get Budget Overview
 export const getBudgetOverview = async () => {

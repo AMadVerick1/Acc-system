@@ -4,7 +4,7 @@ import InvoiceQuotationForm from '../forms/invoiceQuotationForm.jsx';
 import TransactionForm from '../forms/TransactionsForm.jsx';
 
 export default function TransactionFormModal({ isOpen, onClose, onSubmit, initialData }) {
-    const [formType, setFormType] = useState('Transaction'); // Set default to 'Invoice'
+    const [formType, setFormType] = useState('Invoice'); // Set default to 'Invoice'
     
     return (
         <Modal

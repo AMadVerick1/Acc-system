@@ -122,13 +122,13 @@ const InvoiceDocument = ({ formData, transactionId }) => (
             </View>
 
             {/* Bank Details Section */}
-            <View style={styles.bankDetails}>
+            {/* <View style={styles.bankDetails}>
                 <Text>Bank Details:</Text>
                 <Text>Bank Name: {formData.bankName}</Text>
                 <Text>Account Number: {formData.accountNumber}</Text>
                 <Text>Branch Name: {formData.branchName}</Text>
                 <Text>Branch Code: {formData.branchCode}</Text>
-            </View>
+            </View> */}
 
             {/* Footer Line */}
             <View style={styles.footerLine} />
